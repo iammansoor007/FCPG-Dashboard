@@ -1,277 +1,539 @@
 "use client";
 
-import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useContent } from "../../hooks/useContent";
-import { Icon } from "../../config/icons";
-import RichTextRenderer from "../ui/RichTextRenderer";
-import PageInlineFaqs from "@/components/PageInlineFaqs";
+import Image from "next/image";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Send,
+  CheckCircle2,
+  ArrowDown,
+  ChevronDown
+} from "lucide-react";
 
-const HolographicInput = ({ icon: IconName, label, type = "text", ...props }: any) => {
-    const [isFocused, setIsFocused] = useState(false);
-    const [hasValue, setHasValue] = useState(false);
-    return (
-        <div className="relative group">
-            <div className={`relative flex items-center bg-card rounded-xl border transition-all duration-300 ${isFocused ? 'border-primary shadow-lg shadow-primary/10' : hasValue ? 'border-primary/40' : 'border-border hover:border-border/80'}`}>
-                <div className={`absolute left-4 transition-colors duration-300 ${isFocused || hasValue ? 'text-primary' : 'text-muted-foreground'}`}>
-                    <Icon name={IconName} className="w-5 h-5" />
-                </div>
-                <input
-                    type={type}
-                    placeholder={label}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    onChange={(e) => {
-                        setHasValue(!!e.target.value);
-                        props.onChange?.(e);
-                    }}
-                    className="w-full pl-12 pr-4 py-4 bg-transparent rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none"
-                    {...props}
-                />
-            </div>
-        </div>
-    );
+import { useContent } from "@/hooks/useContent";
+import { SouthCarolinaMap } from "@/components/Icons";
+
+const CardIconMap: Record<string, React.ElementType> = {
+  address: MapPin,
+  phone: Phone,
+  email: Mail,
+  hours: Clock
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } }
 };
 
 export default function ContactTemplate({ pageData }: { pageData?: any }) {
-    const { contactPage: globalContactData, footer } = useContent();
+  const { contactPage: cpData, contactForm: cfData } = useContent();
 
-    // Prioritize page-specific content over global content
-    const contactData = pageData?.content?.contactPage || globalContactData;
-    const footerContact = footer?.contact || {};
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
-    const [formData, setFormData] = useState<Record<string, string>>({});
+  const contactPage = pageData?.content?.contactPage || cpData || {};
+  const cf = pageData?.content?.contactForm || cfData || {};
 
-    // Fallback data if CMS has no data yet
-    const header = contactData?.header || {};
-    const badge = header.badge || "Contact Us";
-    const headline = header.headline || "Get In Touch";
-    const description = header.description || "We'd love to hear from you. Fill out the form and we'll get back to you shortly.";
-    const formFields = contactData?.formFields || [
-        { name: "name", label: "Full Name", type: "text", required: true, icon: "User" },
-        { name: "email", label: "Email Address", type: "email", required: true, icon: "Mail" },
-        { name: "phone", label: "Phone Number", type: "tel", required: false, icon: "Phone" },
-        { name: "message", label: "Your Message", type: "textarea", required: true, icon: "MessageSquare" },
-    ];
+  const { hero = {}, directory = {}, form = {} } = contactPage;
+  const cards = cf.cards || [];
+  const serviceOptions = cf.serviceOptions || ["General Inquiry"];
+  const labels = cf.labels || {};
+  const placeholders = cf.placeholders || {};
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        try {
-            const response = await fetch('/api/send', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...formData,
-                    type: 'Contact Form',
-                    subject: `New Contact Form Submission - ${formData.name || 'Unknown'}`,
-                })
-            });
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    propertyName: "",
+    serviceType: serviceOptions[0] || "",
+    message: ""
+  });
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "success">("idle");
 
-            const result = await response.json().catch(() => ({}));
-            if (response.ok || result.success || result.submissionId) {
-                setShowSuccess(true);
-                setFormData({});
-            } else {
-                console.error('Submission failed:', response.status, result);
-                alert(`Error: ${result.error || 'Submission failed'}`);
-            }
-        } catch (error) {
-            console.error('Contact form error:', error);
-            alert('Failed to send message. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
 
-    const inlineFields = formFields.filter((f: any) => f.type !== "textarea");
-    const textareaFields = formFields.filter((f: any) => f.type === "textarea");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitStatus("loading");
 
-    const info = contactData?.info || {};
-    const infoCards = contactData?.infoCards || [];
+    try {
+      const res = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formState,
+          type: "Contact Form",
+          subject: `New Contact Form Submission - ${formState.firstName || ""} ${formState.lastName || ""}`.trim(),
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || "Submission failed");
+      }
+      setSubmitStatus("success");
+      setFormState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        propertyName: "",
+        serviceType: serviceOptions[0] || "",
+        message: ""
+      });
+    } catch (err: any) {
+      setSubmitStatus("idle");
+      alert(err.message || "Failed to send. Please try again.");
+    }
+  };
 
-    // Map infoCards to the info structure if info is empty — also fall back to footer contact
-    const finalInfo = {
-        phone: info.phone || infoCards.find((c: any) => c.type === 'phone')?.value || footerContact.phone || "",
-        email: info.email || infoCards.find((c: any) => c.type === 'email')?.value || footerContact.email || "",
-        address: info.address || infoCards.find((c: any) => c.type === 'location')?.value || footerContact.address || "",
-        hours: info.hours || footerContact.hours || ""
-    };
+  // Calculate form completion progress percentage
+  const fieldsFilled = [
+    formState.firstName.trim(),
+    formState.lastName.trim(),
+    formState.email.trim(),
+    formState.phone.trim(),
+    formState.propertyName.trim(),
+    formState.serviceType.trim(),
+    formState.message.trim()
+  ].filter((val) => val !== "").length;
+  const progressPercent = Math.min(Math.round((fieldsFilled / 7) * 100), 100);
 
-    return (
-        <main className="relative bg-background py-24 min-h-screen overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div
-                    className="absolute inset-0 opacity-[0.02]"
-                    style={{
-                        backgroundImage: `linear-gradient(to right, hsl(var(--primary)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--primary)) 1px, transparent 1px)`,
-                        backgroundSize: '60px 60px',
-                    }}
-                />
-            </div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-primary/5 to-transparent opacity-60 blur-3xl pointer-events-none" />
+  const handleScrollDown = () => {
+    const section = document.getElementById("contact-details");
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-            <div className="max-w-4xl mx-auto px-4 relative">
+  return (
+    <main className="min-h-screen bg-white text-[#072642]">
+      {/* ── HERO SECTION ── */}
+      <section className="relative min-h-[380px] lg:min-h-[460px] overflow-hidden bg-[var(--midnight-navy)] flex items-center text-white">
+        {/* Background Image with slow zoom */}
+        <motion.div
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 w-full h-full"
+        >
+          {hero.bgImage && (
+            <Image
+              src={hero.bgImage}
+              alt={hero.bgImageAlt || "Contact"}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          )}
+        </motion.div>
 
-                {/* Section Header */}
-                <div className="text-center mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
+        {/* Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--midnight-navy)] via-[var(--midnight-navy)]/90 to-[var(--midnight-navy)]/25 md:from-[var(--midnight-navy)] md:via-[var(--midnight-navy)]/80 md:to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--midnight-navy)]/50 via-transparent to-transparent z-10" />
+
+        {/* Grid dots matrix & coordinates overlay */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-10">
+          <svg className="absolute inset-0 w-full h-full opacity-[0.05]" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="contact-grid-dots" width="40" height="40" patternUnits="userSpaceOnUse">
+                <circle cx="2" cy="2" r="1" fill="#ffffff" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#contact-grid-dots)" />
+          </svg>
+          {/* Blueprint style details */}
+          {hero.coordLng && <div className="absolute top-6 right-8 text-[9px] font-mono text-[var(--brand-gold)]/35 tracking-widest">{hero.coordLng}</div>}
+          {hero.coordLat && <div className="absolute bottom-16 right-8 text-[9px] font-mono text-[var(--brand-gold)]/35 tracking-widest">{hero.coordLat}</div>}
+          <div className="absolute bottom-6 left-8 text-[9px] font-mono text-[var(--brand-gold)]/20 tracking-wider hidden md:block">BLUEPRINT_REF: CONTACT_HERO_SC // PROTOCOL_ACTIVE</div>
+        </div>
+
+        {/* Ambient glow */}
+        <div className="absolute top-1/2 left-1/4 w-[350px] h-[350px] bg-[var(--brand-gold)]/[0.06] rounded-full blur-[90px] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10" />
+
+        {/* Bottom accent gold line */}
+        <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--brand-gold)] to-transparent z-20 opacity-70" />
+
+        <div className="relative mx-auto w-full max-w-[1160px] px-4 sm:px-6 lg:px-8 py-16 lg:py-20 z-20">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{ show: { transition: { staggerChildren: 0.12 } } }}
+            className="max-w-[620px]"
+          >
+            {/* Tagline */}
+            {hero.tagline && (
+              <motion.div variants={fadeUp} className="inline-flex items-center gap-2 mb-4">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--brand-gold)] animate-pulse" />
+                <span className="text-[11px] md:text-[12px] font-semibold uppercase tracking-[0.18em] text-[var(--tagline-gold)]">
+                  {hero.tagline}
+                </span>
+              </motion.div>
+            )}
+
+            {/* Heading */}
+            <motion.h1
+              variants={fadeUp}
+              className="text-[28px] sm:text-[48px] lg:text-[58px] font-display font-bold leading-[1.06] tracking-tight text-white"
+            >
+              {hero.heading1}
+              {hero.heading1 && <br />}
+              {hero.heading2}
+              {hero.heading2 && <br />}
+              <span
+                className="text-transparent bg-clip-text"
+                style={{
+                  backgroundImage: "linear-gradient(90deg, #c99b31 0%, #f1cd7c 50%, #c99b31 100%)",
+                  backgroundSize: "200% auto",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                }}
+              >
+                {hero.heading3}
+              </span>
+            </motion.h1>
+
+            {/* Description */}
+            {hero.description && (
+              <motion.p
+                variants={fadeUp}
+                className="mt-5 max-w-[540px] text-[13px] sm:text-[14px] md:text-[15.5px] font-normal leading-[1.65] text-white/80"
+              >
+                {hero.description}
+              </motion.p>
+            )}
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 cursor-pointer opacity-70 hover:opacity-100 transition-opacity duration-300" onClick={handleScrollDown}>
+          <span className="text-[9px] font-bold uppercase tracking-widest text-white/50">Scroll Details</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="flex items-center justify-center w-7 h-7 rounded-full border border-white/20 bg-white/5 text-[var(--brand-gold)]"
+          >
+            <ArrowDown size={12} strokeWidth={2.5} />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── SPLIT CONTACT SECTION ── */}
+      <section id="contact-details" className="relative bg-white overflow-hidden py-16 lg:py-24 scroll-mt-24">
+        {/* Soft grid background */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-0 opacity-40"
+          style={{
+            backgroundImage: "radial-gradient(rgba(5, 41, 70, 0.03) 1.5px, transparent 1.5px)",
+            backgroundSize: "32px 32px",
+            maskImage: "radial-gradient(ellipse 60% 60% at 50% 50%, black 50%, transparent 100%)",
+            WebkitMaskImage: "radial-gradient(ellipse 60% 60% at 50% 50%, black 50%, transparent 100%)",
+          }}
+        />
+
+        <div className="relative z-10 mx-auto w-full max-w-[1160px] px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            
+            {/* Left Column: Office Directory & Map */}
+            <div className="lg:col-span-6 flex flex-col gap-8">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-5 h-[1.5px] bg-brand-gold" />
+                  <p className="text-[10px] font-black tracking-[0.28em] uppercase text-brand-gold">
+                    {directory.badge}
+                  </p>
+                </div>
+                <h2 className="text-3xl md:text-4.5xl font-bold font-display text-text-navy leading-none tracking-tight">
+                  {directory.heading1}{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-tagline-gold">
+                    {directory.heading2}
+                  </span>
+                </h2>
+                <p className="mt-2 text-[14px] text-text-slate leading-[1.7]">
+                  {directory.description}
+                </p>
+              </div>
+
+              {/* Office info directory cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                {cards.map((card: any) => {
+                  const Icon = CardIconMap[card.type] || MapPin;
+                  const isClickable = card.href;
+                  const Tag = isClickable ? "a" : "div";
+                  return (
+                    <Tag
+                      key={card.label}
+                      {...(isClickable ? { href: card.href } : {})}
+                      className={`p-3.5 sm:p-4 rounded-xl border border-[rgba(5,41,70,0.06)] bg-[#f7f8fa]/80 backdrop-blur-sm shadow-sm transition-all duration-300
+                        ${isClickable ? "group cursor-pointer hover:bg-white hover:border-[rgba(201,155,49,0.3)] hover:shadow-md flex flex-col justify-start" : "flex flex-col justify-start"}
+                      `}
                     >
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold tracking-widest uppercase mb-6">
-                            {badge}
-                        </span>
-                        <h1 className="text-4xl sm:text-6xl font-light text-foreground mb-6 leading-tight">
-                            {headline}
-                        </h1>
-                        <div className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            <RichTextRenderer content={description} />
-                        </div>
-                    </motion.div>
+                      <div className="flex items-center gap-2 mb-2 text-[var(--brand-gold)]">
+                        <Icon size={13} />
+                        <span className="text-[9.5px] font-black uppercase tracking-wider text-[var(--text-navy)]/40 font-sans">{card.label}</span>
+                      </div>
+                      <p className={`text-[13.5px] font-bold text-[var(--text-navy)] ${isClickable ? "group-hover:text-[var(--brand-gold)] transition-colors duration-200" : ""}`}>
+                        {card.line1}
+                      </p>
+                      <p className="text-[11.5px] text-[var(--text-slate)] mt-0.5 leading-tight font-medium">
+                        {card.type === "phone" || card.type === "email" ? (
+                          <span className="flex items-center gap-1.5">
+                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#10b981] animate-pulse shrink-0" />
+                            {card.line2}
+                          </span>
+                        ) : (
+                          card.line2
+                        )}
+                      </p>
+                    </Tag>
+                  );
+                })}
+              </div>
+
+              {/* Interactive SC Presence Map */}
+              <div className="flex flex-col gap-4 p-3 sm:p-6 rounded-2xl border border-[rgba(201,155,49,0.18)] bg-white shadow-sm overflow-hidden items-center group relative">
+                {/* Gold grid overlay decoration */}
+                <div className="absolute inset-0 pointer-events-none opacity-[0.02] mix-blend-overlay">
+                  <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <pattern id="map-dots" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="1" cy="1" r="0.5" fill="#c99b31" />
+                      </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#map-dots)" />
+                  </svg>
+                </div>
+                <h3 className="text-[12.5px] font-bold text-text-navy uppercase tracking-wider self-start border-b border-brand-gold/25 pb-1">
+                  Active Statewide Coverage Map
+                </h3>
+                <SouthCarolinaMap />
+              </div>
+            </div>
+
+            {/* Right Column: Detailed Proposal Request Form */}
+            <div className="lg:col-span-6 w-full">
+              <div className="p-4 sm:p-10 rounded-2xl border border-[rgba(201,155,49,0.18)] bg-white shadow-xl relative overflow-hidden">
+                {/* Thin gold top accent border */}
+                <div className="absolute top-0 left-0 right-0 h-[4px] bg-gradient-to-r from-brand-gold to-tagline-gold" />
+
+                <div className="flex flex-col gap-2 mb-6">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5.5 h-[1.5px] bg-brand-gold" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-brand-gold">{form.badge}</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold font-display text-text-navy leading-none tracking-tight mt-1">
+                    {form.heading}
+                  </h3>
+                  <p className="text-[13px] text-text-slate leading-[1.6] mt-1">
+                    {form.description}
+                  </p>
                 </div>
 
-                {/* Form Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, delay: 0.2 }}
-                    className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-3xl p-8 sm:p-12 shadow-2xl"
-                >
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Inline fields grid */}
-                        {inlineFields.length > 0 && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                {inlineFields.map((field: any, idx: number) => (
-                                    <HolographicInput
-                                        key={idx}
-                                        icon={field.icon || "User"}
-                                        label={field.label}
-                                        type={field.type}
-                                        name={field.name}
-                                        value={formData[field.name] || ""}
-                                        onChange={(e: any) => setFormData(prev => ({ ...prev, [field.name]: e.target.value }))}
-                                        required={field.required}
-                                    />
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Textarea fields */}
-                        {textareaFields.map((field: any, idx: number) => (
-                            <div key={`ta-${idx}`} className="relative">
-                                <div className="relative flex bg-card rounded-xl border border-border focus-within:border-primary focus-within:shadow-lg focus-within:shadow-primary/10 transition-all duration-300">
-                                    <div className="absolute left-4 top-4 text-muted-foreground">
-                                        <Icon name={field.icon || "MessageSquare"} className="w-5 h-5" />
-                                    </div>
-                                    <textarea
-                                        placeholder={field.label}
-                                        name={field.name}
-                                        rows={5}
-                                        value={formData[field.name] || ""}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, [field.name]: e.target.value }))}
-                                        required={field.required}
-                                        className="w-full pl-12 pr-4 py-4 bg-transparent rounded-xl text-foreground text-sm placeholder:text-muted-foreground focus:outline-none resize-none"
-                                    />
-                                </div>
-                            </div>
-                        ))}
-
-                        <motion.button
-                            type="submit"
-                            disabled={isSubmitting}
-                            whileHover={{ scale: 1.01 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="w-full py-4 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground rounded-2xl font-bold text-sm tracking-widest uppercase shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {isSubmitting ? 'Sending Message...' : 'Send Message'}
-                        </motion.button>
-                    </form>
-                </motion.div>
-
-                {/* Business Vitals Section */}
-                {(finalInfo.phone || finalInfo.email || finalInfo.address || finalInfo.hours) && (
+                {/* Form completion progress indicator */}
+                <div className="flex flex-col gap-2 mb-6">
+                  <div className="flex justify-between items-center text-[10px] font-black tracking-wider text-text-navy/60">
+                    <span className="uppercase">{form.progressLabel}</span>
+                    <span className="font-mono text-brand-gold">{progressPercent}%</span>
+                  </div>
+                  <div className="w-full h-[3px] bg-gray-100 rounded-full overflow-hidden">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="mt-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"
+                      className="h-full bg-brand-gold"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progressPercent}%` }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                    />
+                  </div>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {submitStatus !== "success" ? (
+                    <motion.form
+                      key="contact-form"
+                      onSubmit={handleSubmit}
+                      className="flex flex-col gap-4 text-text-navy"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
                     >
-                        {finalInfo.phone && (
-                            <div className="bg-card/40 border border-border/50 rounded-2xl p-6 text-center">
-                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-                                    <Icon name="Phone" className="w-5 h-5" />
-                                </div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Phone</h3>
-                                <p className="text-foreground font-medium">{finalInfo.phone}</p>
-                            </div>
-                        )}
-                        {finalInfo.email && (
-                            <div className="bg-card/40 border border-border/50 rounded-2xl p-6 text-center">
-                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-                                    <Icon name="Mail" className="w-5 h-5" />
-                                </div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Email</h3>
-                                <p className="text-foreground font-medium truncate px-2">{finalInfo.email}</p>
-                            </div>
-                        )}
-                        {finalInfo.address && (
-                            <div className="bg-card/40 border border-border/50 rounded-2xl p-6 text-center">
-                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-                                    <Icon name="MapPin" className="w-5 h-5" />
-                                </div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Address</h3>
-                                <p className="text-foreground font-medium">{finalInfo.address}</p>
-                            </div>
-                        )}
-                        {finalInfo.hours && (
-                            <div className="bg-card/40 border border-border/50 rounded-2xl p-6 text-center">
-                                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
-                                    <Icon name="Clock" className="w-5 h-5" />
-                                </div>
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">Hours</h3>
-                                <p className="text-foreground font-medium">{finalInfo.hours}</p>
-                            </div>
-                        )}
+                      {/* Name row */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="firstName" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                            {labels.firstName || "First Name"}
+                          </label>
+                          <input
+                            required
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value={formState.firstName}
+                            onChange={handleChange}
+                            placeholder={placeholders.firstName}
+                            className="h-10 px-3.5 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] placeholder-gray-400 focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="lastName" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                            {labels.lastName || "Last Name"}
+                          </label>
+                          <input
+                            required
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value={formState.lastName}
+                            onChange={handleChange}
+                            placeholder={placeholders.lastName}
+                            className="h-10 px-3.5 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] placeholder-gray-400 focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Contact row */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="email" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                            {labels.email || "Email"}
+                          </label>
+                          <input
+                            required
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formState.email}
+                            onChange={handleChange}
+                            placeholder={placeholders.email}
+                            className="h-10 px-3.5 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] placeholder-gray-400 focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="phone" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                            {labels.phone || "Phone"}
+                          </label>
+                          <input
+                            required
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            value={formState.phone}
+                            onChange={handleChange}
+                            placeholder={placeholders.phone}
+                            className="h-10 px-3.5 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] placeholder-gray-400 focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Property Detail row */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="propertyName" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                            {labels.propertyName || "Property Name"}
+                          </label>
+                          <input
+                            required
+                            type="text"
+                            id="propertyName"
+                            name="propertyName"
+                            value={formState.propertyName}
+                            onChange={handleChange}
+                            placeholder={placeholders.propertyName}
+                            className="h-10 px-3.5 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] placeholder-gray-400 focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label htmlFor="serviceType" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                            {labels.serviceNeeded || "Service Needed"}
+                          </label>
+                          <div className="relative">
+                            <select
+                              id="serviceType"
+                              name="serviceType"
+                              value={formState.serviceType}
+                              onChange={handleChange}
+                              className="w-full h-10 pl-3.5 pr-8 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all appearance-none cursor-pointer font-medium"
+                            >
+                              {serviceOptions.map((opt: string) => (
+                                <option key={opt} value={opt}>
+                                  {opt}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Message area */}
+                      <div className="flex flex-col gap-1.5">
+                        <label htmlFor="message" className="text-[10.5px] font-bold uppercase tracking-wider text-text-navy/70">
+                          {labels.message || "Message"}
+                        </label>
+                        <textarea
+                          required
+                          rows={4}
+                          id="message"
+                          name="message"
+                          value={formState.message}
+                          onChange={handleChange}
+                          placeholder={placeholders.message}
+                          className="p-3.5 bg-[#f7f8fa] border border-gray-200 rounded-md text-[13px] placeholder-gray-400 focus-visible:outline-none focus-visible:border-brand-gold/60 focus-visible:bg-white transition-all resize-none"
+                        />
+                      </div>
+
+                      {/* Submit action */}
+                      <button
+                        type="submit"
+                        disabled={submitStatus === "loading"}
+                        className="group flex h-12 w-full items-center justify-center gap-2.5 bg-[var(--brand-gold)] text-[11px] font-bold uppercase tracking-wider text-white hover:bg-[var(--primary-navy)] active:scale-[0.98] transition-all duration-300 rounded-[4px] cursor-pointer shadow-md hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed mt-2"
+                      >
+                        <Send size={13} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        {submitStatus === "loading"
+                          ? (form.loadingLabel || "Sending...")
+                          : (form.submitLabel || "Submit")}
+                      </button>
+                    </motion.form>
+                  ) : (
+                    <motion.div
+                      key="success-panel"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.4 }}
+                      className="flex flex-col items-center justify-center py-10 px-4 text-center gap-4 border border-emerald-100 bg-emerald-50/20 rounded-xl"
+                    >
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                        className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"
+                      >
+                        <CheckCircle2 size={32} strokeWidth={2} />
+                      </motion.div>
+                      <div>
+                        <h4 className="text-[17px] font-bold text-text-navy font-display">{form.successTitle}</h4>
+                        <p className="mt-2 text-[12.5px] leading-relaxed text-text-slate max-w-[340px]">
+                          {form.successDesc}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setSubmitStatus("idle")}
+                        className="mt-4 px-5 py-2.5 border border-gray-200 hover:border-brand-gold/45 text-[10.5px] font-bold uppercase tracking-wider rounded-md text-text-navy bg-white hover:bg-[#f7f8fa] transition cursor-pointer active:scale-95"
+                      >
+                        {form.resetLabel}
+                      </button>
                     </motion.div>
-                )}
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
-            {/* Success Modal */}
-            <AnimatePresence>
-                {showSuccess && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4"
-                    >
-                        <motion.div
-                            initial={{ scale: 0.9, y: 20 }}
-                            animate={{ scale: 1, y: 0 }}
-                            exit={{ scale: 0.9, y: 20 }}
-                            className="bg-card rounded-3xl p-10 text-center max-w-md w-full shadow-2xl border border-border"
-                        >
-                            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-primary to-primary/80 flex items-center justify-center shadow-2xl shadow-primary/30">
-                                <Icon name="Check" className="w-10 h-10 text-white" />
-                            </div>
-                            <h2 className="text-2xl font-bold text-foreground mb-3">Message Sent!</h2>
-                            <p className="text-muted-foreground mb-8">Thank you for reaching out. We'll get back to you as soon as possible.</p>
-                            <button
-                                onClick={() => setShowSuccess(false)}
-                                className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:bg-primary/90 transition-colors"
-                            >
-                                Close
-                            </button>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
-        </main>
-    );
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }

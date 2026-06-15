@@ -10,6 +10,7 @@ import ContactTemplate from './ContactTemplate';
 import GalleryTemplate from './GalleryTemplate';
 import ServicesTemplate from './ServicesTemplate';
 import ServiceAreaTemplate from './ServiceAreaTemplate';
+import VendorNetworkTemplate from './VendorNetworkTemplate';
 import PageInlineFaqs from '../PageInlineFaqs';
 
 import { ContentProvider } from "@/context/ContentContext";
@@ -26,6 +27,7 @@ export const TEMPLATE_MAP: Record<string, React.ComponentType<any>> = {
   'gallery': GalleryTemplate,
   'services': ServicesTemplate,
   'service-area': ServiceAreaTemplate,
+  'vendor-network': VendorNetworkTemplate,
 };
 
 export const getTemplate = (name: string) => {
@@ -38,7 +40,7 @@ export const TemplateWrapper = ({ templateName, pageData, params }: any) => {
   // Only append the inline FAQ section if this page isn't already the FAQ template
   // and it has page-specific FAQs defined in its content.
   // We also exclude 'service-detail', 'about', 'service-area', and 'services' because those templates manually render their own FAQs.
-  const hasInlineFaqs = !['faq', 'service-detail', 'about', 'service-area', 'services'].includes(templateName) && 
+  const hasInlineFaqs = !['faq', 'service-detail', 'about', 'service-area', 'services', 'vendor-network'].includes(templateName) && 
                         pageData?.content?.faqs && 
                         Array.isArray(pageData.content.faqs) && 
                         pageData.content.faqs.length > 0;

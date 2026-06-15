@@ -17,6 +17,8 @@ export default {
                 heading: ['Space Grotesk', 'sans-serif'],
                 body: ['DM Sans', 'sans-serif'],
                 accent: ['DM Sans', 'sans-serif'],
+                display: ['Space Grotesk', 'sans-serif'],
+                sans: ['Inter', 'sans-serif'],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -74,6 +76,13 @@ export default {
                     black: "#000000",
                     white: "#FFFFFF",
                 },
+                "primary-navy": "#052946",
+                "midnight-navy": "#031b31",
+                "brand-gold": "#c99b31",
+                "tagline-gold": "#d3a438",
+                "text-navy": "#082642",
+                "text-slate": "#43566a",
+                "light-gray": "#f7f8fa",
             },
             borderRadius: {
                 lg: "var(--radius)",

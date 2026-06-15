@@ -1,4 +1,4 @@
-import FAQTemplate from "@/components/templates/FAQTemplate";
+import VendorNetworkTemplate from "@/components/templates/VendorNetworkTemplate";
 import { Metadata } from "next";
 import connectToDatabase from "@/lib/mongodb";
 import SiteContent from "@/models/Content";
@@ -6,26 +6,25 @@ import Script from "next/script";
 import { generateSchema } from "@/lib/schema-generator";
 import { BASE_URL } from "@/lib/constants";
 
-
 export async function generateMetadata(): Promise<Metadata> {
   await connectToDatabase();
   const content = await SiteContent.findOne({ key: "complete_data" }).lean() as any;
-  const faqData = content?.data?.faqPage || content?.data?.faq;
-  const seo = faqData?.seo || {};
-  const pageUrl = `${BASE_URL}/faq`;
+  const vendorData = content?.data?.vendorNetwork;
+  const seo = vendorData?.seo || {};
+  const pageUrl = `${BASE_URL}/vendor-network`;
   
   return {
     metadataBase: new URL(BASE_URL),
     title: {
-      absolute: seo.metaTitle || faqData?.title
+      absolute: seo.metaTitle || "Approved Vendor Network"
     },
-    description: seo.metaDescription,
+    description: seo.metaDescription || "Approved vendor network built for speed, compliance, and quality.",
     alternates: {
       canonical: seo.canonicalUrl || pageUrl,
     },
     openGraph: {
-      title: seo.ogTitle || seo.metaTitle || faqData?.section?.headline || "Frequently Asked Questions",
-      description: seo.ogDescription || seo.metaDescription || faqData?.section?.description,
+      title: seo.ogTitle || seo.metaTitle || "Approved Vendor Network",
+      description: seo.ogDescription || seo.metaDescription || "Approved vendor network built for speed, compliance, and quality.",
       url: pageUrl,
       siteName: "RealRoof",
       type: "website",
@@ -49,31 +48,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function FAQPage() {
+export default async function VendorNetworkPage() {
   await connectToDatabase();
   const content = await SiteContent.findOne({ key: "complete_data" }).lean() as any;
-  const faqData = content?.data?.faqPage;
-  const allFaqs = content?.data?.faq?.items || [];
-  
-  // Filter FAQs for the FAQ page
-  const faqs = allFaqs.filter((item: any) => 
-    item.visibility === 'global' || 
-    (item.visibility === 'specific' && item.targetPages?.includes('faq'))
-  );
+  const vendorData = content?.data?.vendorNetwork || {};
 
   const schema = generateSchema({
-    title: faqData?.title || "Frequently Asked Questions",
-    description: faqData?.description || "",
-    slug: "/faq",
-    type: "WebPage",
-    faqs: faqs
+    title: "Approved Vendor Network",
+    description: "Approved vendor network built for speed, compliance, and quality.",
+    slug: "/vendor-network",
+    type: "WebPage"
   });
 
   const pageData = {
     content: {
-      resourcesFAQ: {
-        ...(content?.data?.resourcesFAQ || {}),
-        faqs: faqs
+      vendorNetwork: {
+        ...(content?.data?.vendorNetwork || {})
       }
     }
   };
@@ -85,7 +75,7 @@ export default async function FAQPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
-      <FAQTemplate pageData={pageData} />
+      <VendorNetworkTemplate pageData={pageData} />
     </>
   );
 }

@@ -201,7 +201,7 @@ export default async function Index() {
       return (
         <>
           <Script id="json-ld-schema" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-          <ServiceDetailTemplate params={Promise.resolve({ slug: service.slug })} />
+          <ServiceDetailTemplate params={{ slug: service.slug }} />
         </>
       );
     }

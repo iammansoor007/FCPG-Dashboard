@@ -1,270 +1,358 @@
 "use client";
-import { useEffect, useRef, useState } from 'react';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import { motion } from 'framer-motion';
-import { Icon } from '../config/icons';
 
-// Custom Map Markers
-const customIcon = new L.Icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, MapPin, Building2, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useContent } from "../hooks/useContent";
 
-const hqIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
+export default function ServiceAreas() {
+  const { sectionHeaders, serviceAreas } = useContent();
 
-const locations = [
-  { name: "Greenville, SC (HQ)", position: [34.8526, -82.3940] as [number, number], coordsStr: "34.85° N, 82.39° W", status: "Active Headquarters", details: "Main Logistics, Estimating & Project Management HQ", iconType: hqIcon },
-  { name: "Columbia, SC", position: [34.0007, -81.0348] as [number, number], coordsStr: "34.00° N, 81.03° W", status: "Dispatch Center", details: "Regional Crew Coordination & Storm Deployment Hub", iconType: customIcon },
-  { name: "Charlotte, NC", position: [35.2271, -80.8431] as [number, number], coordsStr: "35.22° N, 80.84° W", status: "Regional Hub", details: "Residential Partnerships & Commercial Project Office", iconType: customIcon },
-  { name: "Atlanta, GA", position: [33.7490, -84.3880] as [number, number], coordsStr: "33.74° N, 84.38° W", status: "Regional Hub", details: "Large-Scale Flat Roof & Commercial Fleet Logistics", iconType: customIcon },
-  { name: "Knoxville, TN", position: [35.9606, -83.9207] as [number, number], coordsStr: "35.96° N, 83.92° W", status: "Dispatch Center", details: "East TN Residential Services & Installation Support", iconType: customIcon }
-];
-
-export default function ServiceAreaMap() {
-  const mapContainerRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<L.Marker[]>([]);
-  const [activeLocIndex, setActiveLocIndex] = useState(0);
-
-  // Mouse coords for interactive dot grid glow
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCoords({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const sh = sectionHeaders?.serviceAreas || {
+    badge: "Proudly Serving",
+    heading1: "Statewide Coverage.",
+    heading2: "Local Management Expertise.",
+    description: ""
   };
 
-  useEffect(() => {
-    if (!mapContainerRef.current) return;
+  const {
+    coordinateLabels = [],
+    mapVersionLabel = "",
+    tooltipLabels = {
+      statewideTitle: "Statewide Operations",
+      statewideUnit: "Active Regions",
+      statewideDesc: "Full-service management solutions across South Carolina."
+    },
+    ctaLabel = "Request a Consultation",
+    citiesData = []
+  } = serviceAreas || {};
 
-    const container = mapContainerRef.current as any;
-    if (container._leaflet_id) {
-      container._leaflet_id = null;
-    }
-
-    if (!mapInstanceRef.current) {
-      const map = L.map(mapContainerRef.current, {
-        scrollWheelZoom: false,
-        zoomControl: false
-      }).setView([34.8526, -82.3940], 6);
-
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
-      mapInstanceRef.current = map;
-
-      // CartoDB Positron premium light map tiles
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
-      }).addTo(map);
-
-      // Subtle HQ Coverage Radius (320km)
-      L.circle([34.8526, -82.3940], {
-        color: '#1E5D9A',
-        fillColor: '#1E5D9A',
-        fillOpacity: 0.04,
-        weight: 1.5,
-        dashArray: '6, 6',
-        radius: 320000
-      }).addTo(map);
-
-      // Add markers & save instances
-      markersRef.current = locations.map((loc) => {
-        return L.marker(loc.position, { icon: loc.iconType })
-          .addTo(map)
-          .bindPopup(`
-            <div style="padding: 4px; font-family: sans-serif;">
-              <strong style="color: #1E5D9A; font-size: 14px;">${loc.name}</strong><br/>
-              <span style="color: #64748b; font-size: 11px; font-weight: 500;">${loc.status}</span>
-            </div>
-          `);
-      });
-
-      // Default active marker open
-      setTimeout(() => {
-        if (markersRef.current[0]) {
-          markersRef.current[0].openPopup();
-        }
-      }, 500);
-    }
-
-    return () => {
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
-  }, []);
-
-  const handleLocationClick = (index: number) => {
-    setActiveLocIndex(index);
-    const loc = locations[index];
-    if (mapInstanceRef.current) {
-      mapInstanceRef.current.flyTo(loc.position, 8, { duration: 1.2 });
-    }
-    // Close existing popups first
-    markersRef.current.forEach(m => m.closePopup());
-    // Open selected popup
-    setTimeout(() => {
-      if (markersRef.current[index]) {
-        markersRef.current[index].openPopup();
-      }
-    }, 1000);
-  };
+  const [activeCity, setActiveCity] = useState<string | null>(null);
+  const activeCityData = citiesData.find((c: any) => c.id === activeCity);
 
   return (
-    <section
-      onMouseMove={handleMouseMove}
-      className="py-16 md:py-24 lg:py-28 bg-slate-50/50 relative border-b border-slate-100 group overflow-hidden"
-      style={{
-        '--mouse-x': `${coords.x}px`,
-        '--mouse-y': `${coords.y}px`
-      } as React.CSSProperties}
-    >
-      {/* ── Background Decors ── */}
-      <div className="absolute inset-0 bg-white pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(30,93,154,0.05)_1.5px,transparent_1.5px)] [background-size:28px_28px] pointer-events-none" />
+    <section id="service-areas" className="relative bg-white overflow-hidden py-12 lg:py-16"
+      style={{ borderTop: "1px solid #eceae4" }}>
 
-      {/* Spotlight overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(30, 93, 154, 0.05), transparent 80%)`
+      {/* Soft Gold Ambient Glow Blob */}
+      <motion.div
+        animate={{
+          scale: [1, 1.15, 0.95, 1],
+          x: [0, 20, -15, 0],
+          y: [0, -15, 20, 0]
         }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute top-1/4 right-[10%] w-[450px] h-[450px] bg-[var(--brand-gold)]/[0.045] rounded-full blur-[110px] pointer-events-none select-none z-0"
       />
 
-      <div className="absolute -top-48 -right-48 w-96 h-96 bg-primary/[0.04] rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute -bottom-48 -left-48 w-96 h-96 bg-primary/[0.04] rounded-full blur-[90px] pointer-events-none" />
+      <div className="relative z-10 mx-auto w-full max-w-[1160px] px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] items-center gap-12 lg:gap-16">
 
-      <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
+          {/* Left Column: Copy + City Cards */}
+          <div className="flex flex-col items-start justify-center">
 
-        {/* Swapped layout container */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-stretch">
-
-          {/* Left Column: Map visualization (Swapped to Left) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-7 w-full h-[350px] sm:h-[450px] lg:h-auto min-h-[350px] sm:min-h-[450px] lg:min-h-[550px] relative rounded-3xl sm:rounded-[2.5rem] shadow-[0_36px_72px_-20px_rgba(30,93,154,0.15)] border border-slate-100 overflow-hidden z-0 bg-slate-50 order-2 lg:order-1"
-          >
-            <div className="absolute inset-0 bg-slate-50 animate-pulse pointer-events-none" />
-            <div ref={mapContainerRef} className="w-full h-full absolute inset-0 z-0 bg-white" />
-
-            {/* Elegant Map Vignette */}
-            <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.06)] pointer-events-none border border-slate-100 rounded-3xl sm:rounded-[2.5rem]" />
-          </motion.div>
-
-          {/* Right Column: High-End Flight Coordination List Board (Swapped to Right) */}
-          <div className="lg:col-span-5 flex flex-col justify-between py-2 order-1 lg:order-2 space-y-6 lg:space-y-8">
-
-            <div className="space-y-4 lg:space-y-5">
-              <span className="inline-flex items-center gap-2 bg-primary/8 border border-primary/20 text-primary text-xs font-extrabold uppercase tracking-[0.2em] px-5 py-2 rounded-full">
-                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-ping" />
-                Live Logistics Command
+            {/* Elegant capsule section badge */}
+            <div className="inline-flex items-center gap-2 mb-4 border border-[var(--brand-gold)]/25 rounded-full px-3.5 py-1.5 bg-[var(--brand-gold)]/[0.03] shadow-[0_2px_10px_rgba(201,155,49,0.03)]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--brand-gold)] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--brand-gold)]"></span>
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-tight tracking-tight font-heading">
-                Southeast Logistics <br />
-                <span className="text-primary relative inline-block">Dispatch Network<span className="absolute bottom-1.5 left-0 right-0 h-1.5 bg-primary/10 -rotate-1 rounded-full" /></span>
-              </h2>
-              <p className="text-slate-500 leading-relaxed font-medium text-xs sm:text-sm">
-                With hubs and dispatch centers across four major states, we coordinate materials and deploy crews. Click a regional hub below to focus.
-              </p>
+              <p className="text-[10px] font-black tracking-[0.25em] uppercase text-[var(--brand-gold)]">{sh.badge}</p>
             </div>
 
-            {/* Premium Flight-board Selector list */}
-            <div className="space-y-3">
-              {locations.map((loc, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleLocationClick(idx)}
-                  className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-350 flex items-center gap-3 sm:gap-4 group/item relative overflow-hidden bg-white/70 backdrop-blur-sm ${activeLocIndex === idx
-                    ? 'border-primary bg-primary/5 shadow-[0_12px_28px_-10px_rgba(30,93,154,0.15)] ring-1 ring-primary/10 -translate-y-0.5'
-                    : 'border-slate-100/80 hover:border-primary/25 hover:bg-slate-50/50 hover:shadow-sm'
-                    }`}
-                >
-                  {/* Status Indicator Dot */}
-                  <span className={`absolute top-3.5 right-4 w-1.5 h-1.5 rounded-full ${activeLocIndex === idx ? 'bg-primary animate-pulse' : 'bg-emerald-400'
-                    }`} />
+            {/* Editorial Title */}
+            <h2
+              className="font-display font-bold text-[var(--text-navy)] leading-[1.1] tracking-tight mb-4"
+              style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)" }}
+            >
+              <span className="font-serif italic font-normal text-[var(--text-navy)]/95 block mb-1">
+                {sh.heading1}
+              </span>
+              <span
+                className="shimmer-gradient block mt-1"
+                style={{
+                  color: "transparent",
+                  backgroundImage: "linear-gradient(90deg, #c99b31 0%, #f1cd7c 25%, #c99b31 50%, #f1cd7c 75%, #c99b31 100%)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  backgroundSize: "200% auto",
+                }}
+              >
+                {sh.heading2}
+              </span>
+            </h2>
 
-                  {/* Left Icon badge */}
-                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${activeLocIndex === idx ? 'bg-primary text-white shadow-sm' : 'bg-slate-100 text-slate-500'
-                    }`}>
-                    <Icon name="MapPin" className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
-                  </div>
+            <p className="text-[13.5px] font-sans leading-[1.7] text-[var(--text-slate)] mb-6 max-w-[480px]">
+              {sh.description}
+            </p>
 
-                  <div className="flex-1 min-w-0 pr-2 sm:pr-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-extrabold text-slate-900 text-[11px] sm:text-xs tracking-tight truncate">{loc.name}</h4>
-                      <span className="text-[8px] sm:text-[9px] font-mono text-slate-400 font-bold shrink-0 hidden sm:inline-block">{loc.coordsStr}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between mt-1 sm:mt-1.5 gap-2">
-                      <span className={`text-[7px] sm:text-[8px] font-extrabold uppercase tracking-wide px-1.5 py-0.5 rounded-md shrink-0 ${activeLocIndex === idx ? 'bg-primary/10 text-primary' : 'bg-slate-100 text-slate-400'
+            {/* City Chips Grid */}
+            <div className="grid grid-cols-2 gap-3 w-full mb-6">
+              {citiesData.map((city: any, idx: number) => {
+                const isActive = activeCity === city.id;
+                return (
+                  <motion.div
+                    key={city.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.03, duration: 0.5 }}
+                    onMouseEnter={() => setActiveCity(city.id)}
+                    onMouseLeave={() => setActiveCity(null)}
+                    className={`group flex items-center justify-between px-3.5 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer shadow-[0_2px_8px_rgba(8,38,66,0.01)] ${isActive
+                        ? "bg-white border-[rgba(201,155,49,0.45)] shadow-[0_6px_20px_rgba(201,155,49,0.06)] -translate-y-0.5"
+                        : "bg-white/80 backdrop-blur-sm border-[rgba(5,41,70,0.04)] hover:bg-white hover:border-[rgba(201,155,49,0.2)] hover:shadow-[0_4px_12px_rgba(8,38,66,0.02)]"
+                      }`}
+                  >
+                    {/* Left side: Dot + Name */}
+                    <div className="flex items-center gap-2">
+                      <span className={`h-1.5 w-1.5 rounded-full transition-colors duration-200 ${isActive ? "bg-[var(--brand-gold)] scale-110 shadow-[0_0_6px_var(--brand-gold)]" : "bg-black/10 group-hover:bg-[var(--brand-gold)]/30"
+                        }`} />
+                      <h4 className={`font-display font-bold text-[12.5px] transition-colors duration-200 ${isActive ? "text-[var(--text-navy)]" : "text-[var(--text-navy)]/80"
                         }`}>
-                        {loc.status}
-                      </span>
-                      <span className="text-[9px] sm:text-[10px] text-slate-400 truncate font-medium flex-1 text-right sm:text-left">{loc.details}</span>
+                        {city.name}
+                      </h4>
                     </div>
-                  </div>
-                </button>
-              ))}
+
+                    {/* Right side: Count + Detail */}
+                    <div className="flex items-baseline gap-1">
+                      <span className={`font-sans font-black text-[13.5px] leading-none transition-colors duration-200 ${isActive ? "text-[var(--brand-gold)]" : "text-[var(--text-navy)]/70"
+                        }`}>
+                        {city.count}
+                      </span>
+                      <span className={`font-sans text-[8px] font-semibold uppercase tracking-wider transition-colors duration-200 ${isActive ? "text-[var(--text-navy)]" : "text-[var(--text-slate)]/50"
+                        }`}>
+                        {city.type.split(" ").slice(-1)[0]}
+                      </span>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
 
-            {/* Performance Stats Counters in Light Mode */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 lg:pt-6 border-t border-slate-100">
-              {[
-                { val: "2hr", desc: "Dispatch Lead" },
-                { val: "120+", desc: "Local Builders" },
-                { val: "15M+", desc: "Sq.Ft. Installed" }
-              ].map((stat, i) => (
-                <div key={i} className="text-center p-2.5 sm:p-3.5 rounded-2xl bg-white border border-slate-100 hover:border-primary/20 transition-all shadow-sm">
-                  <div className="text-lg sm:text-2xl font-black text-primary tracking-tight">{stat.val}</div>
-                  <div className="text-[7px] sm:text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-1 leading-tight">{stat.desc}</div>
-                </div>
-              ))}
-            </div>
+            {/* CTA Button */}
+            <Link
+              href="#contact"
+              className="group inline-flex h-[44px] items-center justify-center gap-2.5 bg-[var(--brand-gold)] border border-[var(--brand-gold)] px-6 text-[11px] font-bold uppercase !text-white hover:!text-white tracking-wider transition-all duration-200 hover:bg-[var(--primary-navy)] hover:border-[var(--primary-navy)] active:scale-[0.97] rounded-[4px] shadow-lg shadow-black/5"
+            >
+              {ctaLabel}
+              <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
 
-            {/* Live activity ticker at the bottom */}
-            <div className="bg-slate-100/50 border border-slate-200/50 p-3 rounded-2xl flex items-center gap-3 overflow-hidden">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full shrink-0 animate-pulse relative z-10" />
-              <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes marquee {
-                  0% { transform: translateX(0); }
-                  100% { transform: translateX(-50%); }
-                }
-                .marquee-container {
-                  display: flex;
-                  width: max-content;
-                  animation: marquee 30s linear infinite;
-                }
-              `}} />
-              <div className="relative w-full overflow-hidden flex items-center h-4">
-                <div className="marquee-container text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">
-                  <span className="whitespace-nowrap pr-8">
-                    Active Deployments: Greenville HQ coordinating 14 crew dispatches today • Columbia dispatch center logging storm restoration appraisals • Atlanta commercial roofing loading 4 heavy transport carriers •
-                  </span>
-                  <span className="whitespace-nowrap pr-8">
-                    Active Deployments: Greenville HQ coordinating 14 crew dispatches today • Columbia dispatch center logging storm restoration appraisals • Atlanta commercial roofing loading 4 heavy transport carriers •
-                  </span>
-                </div>
+          </div>
+
+          {/* Right Column: Dynamic Map Dashboard */}
+          <div className="relative flex justify-center items-center w-full">
+
+            {/* Dashboard Map Frame */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="relative w-full aspect-[4/3] max-w-[650px] rounded-[32px] border border-[rgba(5,41,70,0.06)] bg-white/40 backdrop-blur-[4px] shadow-[0_12px_40px_rgba(8,38,66,0.03)] p-6 overflow-hidden flex items-center justify-center hover:border-[rgba(201,155,49,0.35)] hover:shadow-[0_20px_50px_rgba(201,155,49,0.08)] transition-all duration-300"
+            >
+              {/* Info Tooltip Overlay */}
+              <div className="absolute bottom-4 left-4 p-4 rounded-xl border border-[rgba(201,155,49,0.18)] bg-[var(--primary-navy)]/95 backdrop-blur-md shadow-2xl z-30 pointer-events-none min-w-[220px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeCity ? activeCity : "statewide"}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {activeCityData ? (
+                      <>
+                        <div className="flex items-center gap-2 mb-1 text-[var(--brand-gold)]">
+                          <MapPin size={13} className="shrink-0 animate-bounce" />
+                          <p className="font-display font-bold text-[12px] uppercase tracking-wider">{activeCityData.name}</p>
+                        </div>
+                        <p className="font-sans font-black text-white text-[24px] leading-none tracking-tight">
+                          {activeCityData.count}
+                        </p>
+                        <p className="font-sans font-semibold text-[var(--brand-gold)]/80 text-[9.5px] uppercase tracking-widest mt-1">
+                          {activeCityData.type}
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-2 mb-1 text-[var(--brand-gold)]/60">
+                          <Building2 size={13} className="shrink-0" />
+                          <p className="font-display font-bold text-[11px] uppercase tracking-wider">{tooltipLabels.statewideTitle}</p>
+                        </div>
+                        <p className="font-sans font-black text-white text-[24px] leading-none tracking-tight">
+                          8 <span className="text-[12px] text-white/50 font-normal">{tooltipLabels.statewideUnit}</span>
+                        </p>
+                        <p className="font-sans font-semibold text-white/50 text-[9.5px] uppercase tracking-widest mt-1">
+                          {tooltipLabels.statewideDesc}
+                        </p>
+                      </>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
               </div>
-            </div>
+              {/* South Carolina Interactive Map */}
+              <svg viewBox="0 0 520 390" role="img" aria-label="South Carolina service area map" className="h-auto w-full drop-shadow-md relative z-10 select-none">
+                <defs>
+                  {/* Deep navy-to-midnight gradient for the map body */}
+                  <linearGradient id="map-fill-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="var(--primary-navy)" />
+                    <stop offset="100%" stopColor="var(--midnight-navy)" />
+                  </linearGradient>
+
+                  {/* Gold border gradient for the map outline */}
+                  <linearGradient id="map-border-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="var(--brand-gold)" stopOpacity="0.3" />
+                    <stop offset="50%" stopColor="#e8b84b" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="var(--brand-gold)" stopOpacity="0.3" />
+                  </linearGradient>
+                </defs>
+
+                {/* Transformed Map Group to Center & Scale South Carolina Shape */}
+                <g transform="translate(-2990, -1410) scale(4.3)">
+
+                  {/* State outline - Navy gradient layer */}
+                  <path
+                    d="M 764.94328,408.16488 L 763.16622,409.13438 L 760.57965,407.84109 L 759.93301,405.7395 L 758.63973,402.18297 L 756.37647,400.08137 L 753.7899,399.43473 L 752.1733,394.58492 L 749.42506,388.60347 L 745.22189,386.66353 L 743.12029,384.72361 L 741.82701,382.13704 L 739.72542,380.1971 L 737.46217,378.90382 L 735.19892,375.99393 L 732.12737,373.73069 L 727.60086,371.95241 L 727.11588,370.49747 L 724.69098,367.58758 L 724.20599,366.13262 L 720.81111,360.95949 L 717.41624,361.12115 L 713.37472,358.69623 L 712.08144,357.40295 L 711.75812,355.62468 L 712.56642,353.68476 L 714.82967,352.71478 L 714.31885,350.4257 L 720.08695,348.08913 L 729.20245,343.50013 L 736.97718,342.69182 L 753.09158,342.26934 L 755.72983,344.14677 L 757.40893,347.50499 L 761.71128,346.89501 L 774.32081,345.44005 L 777.2307,346.24836 L 789.84024,353.84642 L 799.94832,361.9681 L 794.52715,367.42644 L 791.94058,373.56954 L 791.4556,379.8743 L 789.839,380.6826 L 788.70737,383.43083 L 786.28247,384.07747 L 784.18088,387.634 L 781.43265,390.38223 L 779.16941,393.7771 L 777.5528,394.5854 L 773.99627,397.98027 L 771.08638,398.14193 L 772.05635,401.37514 L 767.04487,406.8716 L 764.94328,408.16488 z"
+                    fill="url(#map-fill-grad)"
+                  />
+
+                  {/* State outline - Glowing border line */}
+                  <path
+                    d="M 764.94328,408.16488 L 763.16622,409.13438 L 760.57965,407.84109 L 759.93301,405.7395 L 758.63973,402.18297 L 756.37647,400.08137 L 753.7899,399.43473 L 752.1733,394.58492 L 749.42506,388.60347 L 745.22189,386.66353 L 743.12029,384.72361 L 741.82701,382.13704 L 739.72542,380.1971 L 737.46217,378.90382 L 735.19892,375.99393 L 732.12737,373.73069 L 727.60086,371.95241 L 727.11588,370.49747 L 724.69098,367.58758 L 724.20599,366.13262 L 720.81111,360.95949 L 717.41624,361.12115 L 713.37472,358.69623 L 712.08144,357.40295 L 711.75812,355.62468 L 712.56642,353.68476 L 714.82967,352.71478 L 714.31885,350.4257 L 720.08695,348.08913 L 729.20245,343.50013 L 736.97718,342.69182 L 753.09158,342.26934 L 755.72983,344.14677 L 757.40893,347.50499 L 761.71128,346.89501 L 774.32081,345.44005 L 777.2307,346.24836 L 789.84024,353.84642 L 799.94832,361.9681 L 794.52715,367.42644 L 791.94058,373.56954 L 791.4556,379.8743 L 789.839,380.6826 L 788.70737,383.43083 L 786.28247,384.07747 L 784.18088,387.634 L 781.43265,390.38223 L 779.16941,393.7771 L 777.5528,394.5854 L 773.99627,397.98027 L 771.08638,398.14193 L 772.05635,401.37514 L 767.04487,406.8716 L 764.94328,408.16488 z"
+                    fill="none"
+                    stroke="url(#map-border-grad)"
+                    strokeWidth="0.58"
+                  />
+
+                  {/* Network connection lines from Columbia (Center Hub) */}
+                  {[
+                    { target: "Greenville", d: "M 754 370 Q 740 354, 727 348" },
+                    { target: "Spartanburg", d: "M 754 370 Q 746 353, 738 346" },
+                    { target: "Anderson", d: "M 754 370 Q 737 357, 720 354" },
+                    { target: "Florence", d: "M 754 370 Q 765 361, 776 360" },
+                    { target: "Myrtle Beach", d: "M 754 370 Q 772 364, 790 366" },
+                    { target: "Charleston", d: "M 754 370 Q 763 384, 772 390" },
+                    { target: "Beaufort", d: "M 754 370 Q 757 389, 760 398" },
+                  ].map((line: any) => {
+                    const isLineActive = activeCity === line.target;
+                    return (
+                      <g key={line.target}>
+                        <path
+                          d={line.d}
+                          fill="none"
+                          stroke={isLineActive ? "var(--brand-gold)" : "rgba(201, 155, 49, 0.22)"}
+                          strokeWidth={isLineActive ? "0.46" : "0.17"}
+                          strokeDasharray={isLineActive ? "1.2" : "0.7 0.9"}
+                          className={`transition-all duration-300 pointer-events-none ${isLineActive ? "active-network-line" : ""
+                            }`}
+                          style={{
+                            filter: isLineActive ? "drop-shadow(0 0 1px rgba(201, 155, 49, 0.5))" : "none"
+                          }}
+                        />
+                        {isLineActive && (
+                          <path
+                            d={line.d}
+                            fill="none"
+                            stroke="#ffffff"
+                            strokeWidth="0.8"
+                            strokeDasharray="2 10"
+                            className="travel-pulse-line pointer-events-none"
+                          />
+                        )}
+                      </g>
+                    );
+                  })}
+
+                  {/* Dynamic Radar Scanning Ripple from Columbia */}
+                  <AnimatePresence>
+                    {activeCity && (
+                      <motion.circle
+                        cx="754"
+                        cy="370"
+                        initial={{ r: 2, opacity: 0.8 }}
+                        animate={{ r: 48, opacity: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.4, repeat: Infinity, ease: "easeOut" }}
+                        fill="none"
+                        stroke="var(--brand-gold)"
+                        strokeWidth="0.35"
+                        className="pointer-events-none"
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Central HQ Hub - Columbia Pin (always visible, special styling) */}
+                  <g className="pointer-events-none select-none">
+                    <circle cx="754" cy="370" r="4.2" fill="none" stroke="var(--brand-gold)" strokeWidth="0.4" className="opacity-40" />
+                    <circle cx="754" cy="370" r="1.8" fill="var(--brand-gold)" />
+                  </g>
+
+                  {citiesData.map((city: any) => {
+                    const isActive = activeCity === city.id;
+                    return (
+                      <g
+                        key={city.id}
+                        className="cursor-pointer"
+                        onMouseEnter={() => setActiveCity(city.id)}
+                        onMouseLeave={() => setActiveCity(null)}
+                      >
+                        {/* Outer Pulse Halo */}
+                        {isActive && (
+                          <circle
+                            cx={city.x}
+                            cy={city.y}
+                            r="3.5"
+                            fill="none"
+                            stroke="var(--brand-gold)"
+                            strokeWidth="0.35"
+                            className="opacity-75 animate-ping origin-center"
+                          />
+                        )}
+
+                        {/* Pin Circle */}
+                        <circle
+                          cx={city.x}
+                          cy={city.y}
+                          r={isActive ? "2.1" : "1.4"}
+                          fill={isActive ? "var(--brand-gold)" : "rgba(201, 155, 49, 0.85)"}
+                          className="transition-all duration-300"
+                        />
+                        <circle
+                          cx={city.x}
+                          cy={city.y}
+                          r={isActive ? "0.9" : "0.6"}
+                          fill="var(--primary-navy)"
+                          className="transition-all duration-300"
+                        />
+
+                        {/* Label text */}
+                        <text
+                          x={city.x + 3}
+                          y={city.y + 1}
+                          fill={isActive ? "var(--brand-gold)" : "#ffffff"}
+                          fontSize="2.7"
+                          fontWeight={isActive ? "800" : "600"}
+                          className="transition-all duration-300 pointer-events-none select-none font-sans"
+                          style={{
+                            textShadow: "0 0.5px 1px rgba(0,0,0,0.6)"
+                          }}
+                        >
+                          {city.name}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              </svg>
+
+            </motion.div>
 
           </div>
 

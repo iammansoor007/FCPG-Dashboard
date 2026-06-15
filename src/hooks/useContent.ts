@@ -164,5 +164,14 @@ export const useContent = () => {
             selectedPosts: []
         }),
         allBlogs: Array.isArray(completeData?.allBlogs) ? completeData.allBlogs : [],
+        // New sections from database completeData:
+        sectionHeaders: getSafe(completeData, 'sectionHeaders', {}),
+        whyChoose: getSafe(completeData, 'whyChoose', { values: [] }),
+        vendorNetwork: getSafe(completeData, 'vendorNetwork', { sections: [] }),
+        trustStrip: getSafe(completeData, 'trustStrip', { pillars: [], credentials: [] }),
+        homepageTestimonials: getSafe(completeData, 'testimonials', { testimonials: [] }),
+        resourcesFAQ: getSafe(completeData, 'resourcesFAQ', { faqs: [] }),
+        serviceAreas: getSafe(completeData, 'serviceAreas', { citiesData: [] }),
+        contactForm: getSafe(completeData, 'contactForm', { cards: [], serviceOptions: [], labels: {}, placeholders: {} }),
     };
 };
