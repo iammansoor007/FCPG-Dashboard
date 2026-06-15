@@ -66,6 +66,7 @@ export default function ContactTemplate({ pageData }: { pageData?: any }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formState,
+          name: `${formState.firstName} ${formState.lastName}`.trim(),
           type: "Contact Form",
           subject: `New Contact Form Submission - ${formState.firstName || ""} ${formState.lastName || ""}`.trim(),
         }),
