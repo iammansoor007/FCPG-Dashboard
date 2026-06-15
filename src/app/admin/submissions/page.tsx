@@ -28,13 +28,25 @@ export default function SubmissionsPage() {
     }
   };
 
+  const isTypeMatch = (subType: string, targetType: string) => {
+    if (targetType === "All") return true;
+    if (targetType === "Contact Form") {
+      return subType === "Contact Form" || subType === "Contact Form Inquiry";
+    }
+    return subType === targetType;
+  };
+
   const filteredSubmissions = useMemo(() => {
     return submissions.filter((sub) => {
-      const matchesType = filterType === "All" || sub.type === filterType;
+      const matchesType = isTypeMatch(sub.type || "", filterType);
+      const name = sub.name || "";
+      const email = sub.email || "";
+      const message = sub.message || "";
+      const query = searchQuery.toLowerCase();
       const matchesSearch = 
-        sub.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        sub.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (sub.message && sub.message.toLowerCase().includes(searchQuery.toLowerCase()));
+        name.toLowerCase().includes(query) ||
+        email.toLowerCase().includes(query) ||
+        message.toLowerCase().includes(query);
       return matchesType && matchesSearch;
     });
   }, [submissions, filterType, searchQuery]);
@@ -55,11 +67,12 @@ export default function SubmissionsPage() {
           { label: "Quotes", value: "Quote Request" },
           { label: "Jobs", value: "Job Application" },
           { label: "Inquiries", value: "Contact Form" },
+          { label: "Bookings", value: "Booking" },
           { label: "Newsletter", value: "Newsletter" },
         ].map((opt, idx, arr) => (
           <React.Fragment key={opt.value}>
             <button onClick={() => setFilterType(opt.value)} className={`${filterType === opt.value ? 'text-black font-bold' : 'text-[#2271b1] hover:text-[#135e96] underline decoration-transparent hover:decoration-current'}`}>
-              {opt.label} <span className="text-[#646970] font-normal">({submissions.filter(s => opt.value === 'All' || s.type === opt.value).length})</span>
+              {opt.label} <span className="text-[#646970] font-normal">({submissions.filter(s => isTypeMatch(s.type || "", opt.value)).length})</span>
             </button>
             {idx < arr.length - 1 && <span className="text-[#c3c4c7]">|</span>}
           </React.Fragment>

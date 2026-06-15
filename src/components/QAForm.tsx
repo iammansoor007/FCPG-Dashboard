@@ -119,9 +119,9 @@ ${form.message}
 
     try {
       const payload = {
-        type: 'Contact Form Inquiry',
-        subject: `Contact Inquiry - ${form.firstName} ${form.lastName}`,
-        name: `${form.firstName} ${form.lastName}`,
+        type: 'Contact Form',
+        subject: `Contact Inquiry - ${form.firstName} ${form.lastName}`.trim(),
+        name: `${form.firstName} ${form.lastName}`.trim(),
         email: form.email,
         phone: form.phone,
         propertyName: form.propertyName,
