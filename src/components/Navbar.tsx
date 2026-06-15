@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronDown, CalendarDays, Menu, Phone, MapPin, Mail, X,
   UsersRound, Home, Building2, HardHat, BadgeDollarSign,
-  ClipboardCheck, MessageCircle, Handshake, Award, Clock3
+  ClipboardCheck, MessageCircle, Handshake, Award, Clock3,
+  Layout, TreePine
 } from "lucide-react";
 import Link from "next/link";
 import { LogoMark, FacebookIcon } from "./Icons";
@@ -21,7 +22,9 @@ const IconMap = {
   MessageCircle,
   Handshake,
   Award,
-  Clock3
+  Clock3,
+  Layout,
+  TreePine
 };
 
 export default function Header() {

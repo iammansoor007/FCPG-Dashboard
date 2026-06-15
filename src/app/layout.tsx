@@ -135,7 +135,7 @@ export default async function RootLayout({
   try {
     const [globalContent, blogPosts] = await Promise.all([
       SiteContent.findOne({ key: 'complete_data' }).lean(),
-      Post.find({ status: 'published', isTrashed: { $ne: true } }).sort({ date: -1 }).limit(10).lean()
+      Post.find({ status: 'published', isTrashed: { $ne: true } }).sort({ publishedAt: -1 }).limit(10).lean()
     ]);
 
     if (globalContent?.data) initialGlobalData = globalContent.data;
