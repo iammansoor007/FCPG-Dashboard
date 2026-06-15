@@ -1,0 +1,330 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #072642;
+  --primary-navy: #052946;
+  --midnight-navy: #031b31;
+  --midnight-navy-95: rgba(3, 27, 49, 0.95);
+  --midnight-navy-30: rgba(3, 27, 49, 0.3);
+  --brand-gold: #c99b31;
+  --brand-gold-90: rgba(201, 155, 49, 0.9);
+  --tagline-gold: #d3a438;
+  --text-navy: #082642;
+  --text-slate: #43566a;
+  --light-gray: #f7f8fa;
+}
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-serif: ui-serif, Georgia, serif;
+  --color-primary-navy: var(--primary-navy);
+  --color-midnight-navy: var(--midnight-navy);
+  --color-brand-gold: var(--brand-gold);
+  --color-tagline-gold: var(--tagline-gold);
+  --color-text-navy: var(--text-navy);
+  --color-text-slate: var(--text-slate);
+  --color-light-gray: var(--light-gray);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+  /* Force hardware acceleration for scroll */
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Optimize text rendering */
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1;
+  /* Prevent paint flashing on scroll */
+  overflow-x: hidden;
+}
+
+/* Custom branded scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--midnight-navy);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-gold);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tagline-gold);
+}
+
+/* Accessible focus ring */
+:focus-visible {
+  outline: 2px solid var(--brand-gold);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: var(--brand-gold);
+  color: #ffffff;
+}
+
+img {
+  max-width: 100%;
+  /* Prevent layout shift during image load */
+  height: auto;
+}
+
+/* ============================================================
+   GPU Hardware Acceleration — buttery-smooth animations
+   ============================================================ */
+.marquee-track,
+.animate-scroll-up,
+.animate-scroll-down,
+[class*="marquee"] {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  /* Force composite layer */
+  isolation: isolate;
+}
+
+/* ============================================================
+   Global Keyframes — defined once here, reused everywhere
+   ============================================================ */
+@keyframes scroll-up {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+
+@keyframes scroll-down {
+  from { transform: translate3d(0, -50%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes trust-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ============================================================
+   Animation utility classes
+   ============================================================ */
+.animate-scroll-up {
+  animation: scroll-up var(--duration, 45s) linear infinite;
+}
+
+.animate-scroll-down {
+  animation: scroll-down var(--duration, 45s) linear infinite;
+}
+
+.animate-trust-marquee {
+  animation: trust-marquee 36s linear infinite;
+}
+
+.shimmer-gradient {
+  animation: shimmer 6s linear infinite;
+}
+
+/* Pause on hover — smooth UX */
+.marquee-track:hover,
+.animate-trust-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   Reduced Motion — respect user accessibility preferences
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-up,
+  .animate-scroll-down,
+  .animate-trust-marquee,
+  .shimmer-gradient {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   Layout containment — skip offscreen paint/layout calculations
+   ============================================================ */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
+}
+
+/* Above-the-fold content renders immediately — no lazy skip */
+#home {
+  content-visibility: visible !important;
+  contain-intrinsic-size: unset !important;
+}
+
+/* ============================================================
+   Interactive element performance hints
+   ============================================================ */
+button,
+a[href],
+[role="button"] {
+  /* Hint GPU for interactive elements that will animate */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Pre-promote elements that will animate on hover */
+.group:hover .group-hover\:scale-x-100,
+.group:hover .group-hover\:opacity-100 {
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   CtaBar — Gradient text & button shimmer animations
+   ============================================================ */
+@keyframes gradient-shine {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes gold-shimmer {
+  0%   { transform: translateX(-150%) skewX(-25deg); }
+  100% { transform: translateX(150%) skewX(-25deg); }
+}
+
+.animated-gradient-text {
+  background-size: 200% auto;
+  animation: gradient-shine 5s ease infinite;
+}
+
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10%;
+  right: -10%;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent
+  );
+  transform: translateX(-150%) skewX(-25deg);
+  pointer-events: none;
+}
+
+.btn-shimmer:hover::after {
+  animation: gold-shimmer 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-text,
+  .btn-shimmer:hover::after {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   ServiceAreas — SVG network line animations
+   ============================================================ */
+@keyframes network-dash {
+  to { stroke-dashoffset: -20; }
+}
+
+@keyframes pulse-travel {
+  to { stroke-dashoffset: -12; }
+}
+
+.active-network-line {
+  animation: network-dash 0.8s linear infinite;
+}
+
+.travel-pulse-line {
+  animation: pulse-travel 0.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active-network-line,
+  .travel-pulse-line {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   ContactForm — premium card shimmer hover effect
+   ============================================================ */
+.premium-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.premium-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(201, 155, 49, 0.06) 50%,
+    transparent 55%
+  );
+  transform: rotate(45deg);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.premium-shimmer:hover::after {
+  left: 120%;
+  top: 120%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .premium-shimmer::after {
+    display: none;
+  }
+}

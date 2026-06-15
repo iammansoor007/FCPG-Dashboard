@@ -1,0 +1,168 @@
+import { useContentContext } from "../context/ContentContext";
+
+export const useContent = () => {
+    const completeData = useContentContext();
+
+    // Deep fallback helper to prevent undefined.property crashes
+    const getSafe = (data: any, key: string, fallback: any = {}) => {
+        return data?.[key] || fallback;
+    };
+
+    const footer = getSafe(completeData, 'footer');
+    const footerServices = getSafe(footer, 'services', { title: "Our Services", materials: { title: "Premium Materials", items: [] } });
+    const footerContact = getSafe(footer, 'contact', { title: "Contact Us", email: "", phone: "", address: "", emergency: "", areas: "" });
+    const footerCompany = getSafe(footer, 'company', { name: "RealRoof", tagline: "Locally Owned & Operated", description: "", logo: "" });
+    const footerBottom = getSafe(footer, 'bottom', { copyright: "© 2026 RealRoof", rights: "All Rights Reserved", tagline: "", links: [] });
+    const footerMarquee = getSafe(footer, 'marquee', { texts: [], speed: 30, repeats: 8 });
+    const footerCertifications = getSafe(footer, 'certifications', []);
+
+    return {
+        navbar: getSafe(completeData, 'navbar', { menu: [], logo: "", cta: { text: "Get Quote", href: "/contact" } }),
+        header: getSafe(completeData, 'header', {
+            brand: { first: "", last: "", tagline: "" },
+            contact: { phone: "", phoneHref: "", location: "", locationHref: "", email: "", emailHref: "" },
+            drawerTitle: "",
+            ctaLabel: "",
+            nav: [],
+            servicesDropdownItems: [],
+            resourcesDropdownItems: []
+        }),
+        hero: getSafe(completeData, 'hero', { headlines: [], description: "", buttons: [], stats: [], images: [] }),
+        about: getSafe(completeData, 'about'),
+        services: (() => {
+            const s = getSafe(completeData, 'services', { services: [] });
+            // Normalize: if it's already an array, wrap it in the expected object structure
+            const baseObj = Array.isArray(s) ? { services: s } : { ...s };
+
+            // Lift section fields to root if present
+            if (baseObj.section) {
+                const sec = baseObj.section;
+                if (sec.badge && !baseObj.badge) baseObj.badge = sec.badge;
+                if (sec.headline && !baseObj.headline) baseObj.headline = sec.headline;
+                if (sec.description && !baseObj.description) baseObj.description = sec.description;
+            }
+
+            // Standardize headline to { prefix, highlight, suffix } if it's a string
+            if (baseObj.headline && typeof baseObj.headline === 'string') {
+                baseObj.headline = { prefix: "", highlight: baseObj.headline, suffix: "" };
+            }
+
+            return baseObj;
+        })(),
+        leadership: getSafe(completeData, 'leadership', {
+            section: { badge: "", headline: "", description: "" },
+            ceo: { name: "", title: "", image: { src: "" }, badges: { top: "", bottom: "" }, quotes: [], description: "", socials: [] }
+        }),
+        portfolio: (() => {
+            const p = getSafe(completeData, 'portfolio', {});
+            const selectedProjects = Array.isArray(p.projects) ? p.projects : [];
+
+            // If no projects specifically selected for home, use from galleryPage
+            if (selectedProjects.length === 0) {
+                const galleryProjects = completeData?.galleryPage?.projects || [];
+                if (Array.isArray(galleryProjects) && galleryProjects.length > 0) {
+                    return {
+                        ...p,
+                        projects: galleryProjects.slice(0, 8) // Show up to 8 featured
+                    };
+                }
+            }
+
+            return {
+                ...p,
+                projects: selectedProjects
+            };
+        })(),
+        testimonials: (() => {
+            const t = getSafe(completeData, 'testimonials', {
+                section: { badge: "", headline: "", description: "" },
+                testimonials: []
+            });
+            return {
+                ...t,
+                testimonials: Array.isArray(t.testimonials) ? t.testimonials : (Array.isArray(t.items) ? t.items : [])
+            };
+        })(),
+        whyChooseUs: getSafe(completeData, 'whyChooseUs', {
+            section: { badge: "", headline: "", description: "" },
+            features: [],
+            stats: [],
+            cta: { badge: "", title: "", description: "", trustBadges: [], buttons: [] }
+        }),
+        faq: getSafe(completeData, 'faq', {
+            section: { badge: "", headline: "", title: "", description: "" },
+            categories: [],
+            items: []
+        }),
+        quote: getSafe(completeData, 'quote', {
+            section: { badge: "", headline: "", description: "" },
+            services: [],
+            projectTypes: [],
+            timelines: [],
+            success: { title: "", message: "", response: "", buttonText: "" }
+        }),
+        footer: {
+            ...footer,
+            services: footerServices,
+            contact: footerContact,
+            company: footerCompany,
+            bottom: footerBottom,
+            marquee: footerMarquee,
+            certifications: footerCertifications,
+            newsletter: getSafe(footer, 'newsletter', { placeholder: "Enter your email", buttonText: "Subscribe" })
+        },
+        team: getSafe(completeData, 'team', {
+            section: { badge: "", headline: "", description: "" },
+            members: []
+        }),
+        careers: getSafe(completeData, 'careers', {
+            section: { badge: "", headline: "", description: "" },
+            roles: [],
+            success: { title: "", description: "" },
+            labels: { name: "", email: "", role: "", summary: "" }
+        }),
+        aboutPage: {
+            ...(completeData?.aboutPage || {}),
+            // Root-level overrides for dynamic pages
+            ...(completeData?.hero ? { hero: completeData.hero } : {}),
+            ...(completeData?.mission ? { mission: completeData.mission } : {}),
+            ...(completeData?.story ? { story: completeData.story } : {}),
+            ...(completeData?.values ? { values: completeData.values } : {}),
+            ...(completeData?.capabilities ? { capabilities: completeData.capabilities } : {}),
+            ...(completeData?.stats ? { stats: completeData.stats } : {}),
+            ...(completeData?.ctaBanner ? { ctaBanner: completeData.ctaBanner } : {}),
+            ...(completeData?.recognition ? { recognition: completeData.recognition } : {}),
+        },
+        images: getSafe(completeData, 'images', {}),
+        loader: getSafe(completeData, 'loader', { company: { name: "RealRoof", tagline: "Locally Owned" }, phases: { simpleDark: 200, roofDraw: 300, logoText: 400, ready: 100 } }),
+        quickQuote: getSafe(completeData, 'quickQuote', {
+            title: "",
+            description: "",
+            buttonText: ""
+        }),
+        hours: getSafe(completeData, 'hours'),
+        contactPage: getSafe(completeData, 'contactPage', {
+            header: { badge: "", headline: "", description: "" },
+            formFields: [],
+            info: {},
+            social: {}
+        }),
+        galleryPage: getSafe(completeData, 'galleryPage', {
+            header: { badge: "", title: "", description: "" }
+        }),
+        brandStore: getSafe(completeData, 'brandStore', {
+            section: { badge: "", headline: "", description: "" },
+            items: []
+        }),
+        serviceDetailPage: getSafe(completeData, 'serviceDetailPage'),
+        settings: completeData?.settings || { siteTitle: "RealRoof", siteTemplate: "%s | RealRoof", favicon: "/realrooflogo.webp" },
+        faqPage: getSafe(completeData, 'faqPage'),
+        blogSection: getSafe(completeData, 'blogSection', {
+            title: "Latest from the Blog",
+            subtitle: "Insights & News",
+            description: "Stay updated with the latest trends, tips, and news from the roofing and construction industry.",
+            selectedPosts: []
+        }),
+        allBlogs: Array.isArray(completeData?.allBlogs) ? completeData.allBlogs : [],
+    };
+};

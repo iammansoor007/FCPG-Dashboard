@@ -1,0 +1,1073 @@
+{
+    "sectionHeaders": {
+        "serviceDivisions": {
+            "badge": "Our Services",
+            "heading1": "Property Management",
+            "heading2": "Solutions That",
+            "heading3": "Perform",
+            "description": "From residential communities to commercial assets, we deliver expertise, transparency, and peace of mind at every step.",
+            "footerStrip": "Serving homeowners, investors & developers across South Carolina"
+        },
+        "whyChoose": {
+            "badge": "Why First Choice",
+            "heading1": "A Partner You Can",
+            "heading2": "Rely On",
+            "description": "We go beyond day-to-day management — we are strategic partners focused on protecting assets, enhancing communities, and delivering exceptional results at every level.",
+            "primaryCta": "Get Started",
+            "secondaryCta": "About Our Company",
+            "trustLine": "Trusted by communities across South Carolina since 2009"
+        },
+        "vendorNetwork": {
+            "badge": "Vendor Network",
+            "heading1": "A Vetted Network",
+            "heading2": "Built for Performance",
+            "description": "Every vendor in our registry is licensed, insured, and held to strict SLA standards — so your property is always in qualified hands."
+        },
+        "trustStrip": {
+            "badge": "Our Commitments",
+            "heading1": "Standards That",
+            "heading2": "Don't Bend.",
+            "description": "Every promise is backed by a credential, a process, or a measurable SLA — accountability is not optional."
+        },
+        "testimonials": {
+            "badge": "Client Stories",
+            "heading1": "Stories of Impact.",
+            "heading2": "Shared by Our Communities.",
+            "description": "Discover why board members, residential owners, and real estate developers across South Carolina partner with First Choice Property Group for unmatched service and compliance."
+        },
+        "serviceAreas": {
+            "badge": "Proudly Serving",
+            "heading1": "Statewide Coverage.",
+            "heading2": "Local Management Expertise.",
+            "description": "First Choice Property Group delivers master-class property management across South Carolina. Explore our active regions on the map to see how we elevate community standards."
+        },
+        "proofBar": {
+            "badge": "By the Numbers"
+        }
+    },
+    "hero": {
+        "tagline": "Professional Property Management",
+        "heading1": "Managing Communities.",
+        "heading2": "Protecting Investments.",
+        "heading3": "Maximizing Value.",
+        "description": "First Choice Property Group is a full-service property management company proudly serving communities, property owners, investors, and developers throughout South Carolina.",
+        "primaryCta": "Schedule a Consultation",
+        "secondaryCta": "Request a Proposal",
+        "bgImage": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85",
+        "bgImageAlt": "Townhome community street",
+        "coordLat": "+ 34.8526° N",
+        "coordLng": "+ 82.3861° W"
+    },
+    "ctaBar": {
+        "sectionTag": "01 / Partnership standard",
+        "heading1": "Elevate Your Community.",
+        "heading2": "Protect Your Asset.",
+        "description": "First Choice Property Group brings certified operational excellence, responsive management, and state-of-the-art technology to property owners and homeowner associations across South Carolina.",
+        "trustItems": [
+            {
+                "icon": "Clock",
+                "title": "24-Hr SLA",
+                "desc": "Guaranteed response times."
+            },
+            {
+                "icon": "ShieldCheck",
+                "title": "Licensed SC",
+                "desc": "Fully certified managers."
+            },
+            {
+                "icon": "Layers",
+                "title": "Resource Hub",
+                "desc": "Owner checklists & templates."
+            }
+        ],
+        "cardTag": "executive desk active",
+        "cardHeading": "Begin a Partnership",
+        "cardDesc": "Connect with our team to request a custom proposal or schedule an intro call.",
+        "primaryCta": "Schedule a Consultation",
+        "primaryCtaHref": "/contact",
+        "secondaryCta": "Call Direct: (864) 326-0000",
+        "secondaryCtaHref": "tel:8643260000",
+        "disclaimer1": "No obligation consultation",
+        "disclaimer2": "SC Office",
+        "bgImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+        "bgImageAlt": "Sleek skyscraper structural details",
+        "coordLat": "LAT 34.8526° N",
+        "coordLng": "LNG 82.3861° W"
+    },
+    "contactForm": {
+        "badge": "Partner With Us",
+        "heading1": "Start a Conversation.",
+        "heading2": "Request a Proposal.",
+        "description": "Ready to elevate your property standards? Submit your association or property details below, and our leadership team will respond with a tailored proposal package.",
+        "cards": [
+            {
+                "type": "address",
+                "label": "Corporate HQ",
+                "line1": "Greenville, SC",
+                "line2": "124 Verdae Blvd, 29607"
+            },
+            {
+                "type": "phone",
+                "label": "Direct Line",
+                "href": "tel:8643260000",
+                "line1": "(864) 326-0000",
+                "line2": "SLA: < 1m Wait Time"
+            },
+            {
+                "type": "email",
+                "label": "Corporate Inbox",
+                "href": "mailto:info@firstchoicepg.com",
+                "line1": "info@firstchoicepg.com",
+                "line2": "SLA: < 2h Response"
+            },
+            {
+                "type": "hours",
+                "label": "Business Hours",
+                "line1": "8:00 AM - 5:00 PM",
+                "line2": "Monday through Friday"
+            }
+        ],
+        "serviceOptions": [
+            "HOA Property Management",
+            "Residential Rentals",
+            "Commercial Management",
+            "Financial Services Only",
+            "General Consultation"
+        ],
+        "successTitle": "Proposal Request Received",
+        "successDesc": "Thank you for contacting us. A senior partner will review your inquiry and follow up within 2 hours.",
+        "submitLabel": "Submit Proposal Request",
+        "loadingLabel": "Processing Proposal Request...",
+        "resetLabel": "Send Another Inquiry",
+        "progressLabel": "PROPOSAL FORM COMPLETION",
+        "labels": {
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "propertyName": "Property / Association Name",
+            "serviceNeeded": "Service Needed",
+            "message": "Message / Details"
+        },
+        "placeholders": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "john@example.com",
+            "phone": "(864) 555-0199",
+            "propertyName": "e.g. Verdae Park HOA",
+            "message": "Tell us about your property management needs..."
+        }
+    },
+    "header": {
+        "brand": {
+            "first": "First Choice",
+            "last": "Property Group",
+            "tagline": "Your property. Our priority."
+        },
+        "contact": {
+            "phone": "(864) 326-0000",
+            "phoneHref": "tel:8643260000",
+            "location": "Greenville, SC",
+            "locationHref": "https://maps.google.com/?q=Greenville,SC",
+            "email": "info@firstchoicepg.com",
+            "emailHref": "mailto:info@firstchoicepg.com"
+        },
+        "drawerTitle": "Need Assistance?",
+        "ctaLabel": "Request a Consultation",
+        "nav": [
+            "Home",
+            "About Us",
+            "Services",
+            "Vendor Network",
+            "FAQ",
+            "Contact"
+        ],
+        "servicesDropdownItems": [
+            {
+                "title": "HOA Management",
+                "href": "/services/hoa-management",
+                "description": "Expert governance, compliance, and community satisfaction.",
+                "icon": "UsersRound"
+            },
+            {
+                "title": "Residential Management",
+                "href": "/services/residential-management",
+                "description": "Tenant placement, maintenance, and financial oversight.",
+                "icon": "Home"
+            },
+            {
+                "title": "Commercial Management",
+                "href": "/services/commercial-management",
+                "description": "Solutions for office, retail, and mixed-use spaces.",
+                "icon": "Building2"
+            },
+            {
+                "title": "Developer Services",
+                "href": "/services/developer-services",
+                "description": "Interim management from development to governance.",
+                "icon": "HardHat"
+            },
+            {
+                "title": "Financial Management",
+                "href": "/services/financial-management",
+                "description": "Budgeting, reporting, and reserve fund oversight.",
+                "icon": "BadgeDollarSign"
+            }
+        ],
+        "resourcesDropdownItems": [
+            {
+                "title": "Blog & Insights",
+                "href": "/#resources",
+                "description": "Latest news, tips, and articles for property owners.",
+                "icon": "ClipboardCheck"
+            },
+            {
+                "title": "FAQs",
+                "href": "/faq",
+                "description": "Answers to common association & management questions.",
+                "icon": "MessageCircle"
+            },
+            {
+                "title": "Owner Resources",
+                "href": "/#resources",
+                "description": "Onboarding documents, landlord tips, and local guidelines.",
+                "icon": "Handshake"
+            },
+            {
+                "title": "HOA Board Center",
+                "href": "/#resources",
+                "description": "Board member training materials and compliance templates.",
+                "icon": "Award"
+            },
+            {
+                "title": "Resident Guides",
+                "href": "/#resources",
+                "description": "Move-in checklists, utility setup forms, and handbooks.",
+                "icon": "Clock3"
+            }
+        ]
+    },
+    "footer": {
+        "brandFirst": "First Choice",
+        "brandLast": "Property Group",
+        "tagline": "Full-service property management solutions for communities, property owners, investors, and developers across South Carolina.",
+        "license": "SC License #10842 • Certified CMCA / AMS",
+        "copyright": "© 2026 First Choice Property Group. All Rights Reserved.",
+        "versionTag": "SYSTEM ACTIVE V2.4",
+        "columnTitles": {
+            "quickLinks": "Quick Links",
+            "services": "Our Services",
+            "resources": "Resources",
+            "contact": "Contact Us"
+        },
+        "contactLabels": {
+            "phone": "Call office",
+            "email": "corporate inbox",
+            "address": "Greenville HQ"
+        },
+        "bottomLinks": [
+            {
+                "label": "Privacy Policy",
+                "href": "#"
+            },
+            {
+                "label": "Terms of Service",
+                "href": "#"
+            }
+        ],
+        "contact": {
+            "phone": "(864) 326-0000",
+            "phoneHref": "tel:8643260000",
+            "email": "info@firstchoicepg.com",
+            "emailHref": "mailto:info@firstchoicepg.com",
+            "addressLine1": "1230 Woodruff Road",
+            "addressLine2": "Suite 101",
+            "addressLine3": "Greenville, SC 29607",
+            "mapsHref": "https://maps.google.com/?q=1230+Woodruff+Road+Suite+101+Greenville+SC+29607"
+        },
+        "quickLinks": [
+            {
+                "label": "Home",
+                "href": "/"
+            },
+            {
+                "label": "About Us",
+                "href": "/about"
+            },
+            {
+                "label": "Services",
+                "href": "/services/hoa-management"
+            },
+            {
+                "label": "Vendor Network",
+                "href": "/vendor-network"
+            },
+            {
+                "label": "FAQ",
+                "href": "/faq"
+            },
+            {
+                "label": "Contact",
+                "href": "/contact"
+            }
+        ],
+        "services": [
+            {
+                "label": "HOA Management",
+                "href": "/services/hoa-management"
+            },
+            {
+                "label": "Residential Management",
+                "href": "/services/residential-management"
+            },
+            {
+                "label": "Commercial Management",
+                "href": "/services/commercial-management"
+            },
+            {
+                "label": "Developer & Builder Services",
+                "href": "/services/developer-services"
+            },
+            {
+                "label": "Financial Management",
+                "href": "/services/financial-management"
+            }
+        ],
+        "resources": [
+            {
+                "label": "Blog",
+                "href": "/#resources"
+            },
+            {
+                "label": "FAQs",
+                "href": "/#resources"
+            },
+            {
+                "label": "Owner Resources",
+                "href": "/#resources"
+            },
+            {
+                "label": "HOA Resources",
+                "href": "/#resources"
+            },
+            {
+                "label": "Tenant Resources",
+                "href": "/#resources"
+            }
+        ]
+    },
+    "proofBar": {
+        "stats": [
+            {
+                "to": 20,
+                "suffix": "+",
+                "label": "Years of Experience",
+                "sub": "Serving SC since founding"
+            },
+            {
+                "to": 500,
+                "suffix": "+",
+                "label": "Properties Managed",
+                "sub": "Residential, commercial & HOA"
+            },
+            {
+                "to": 98,
+                "suffix": "%",
+                "label": "Client Retention Rate",
+                "sub": "Built on trust & results"
+            },
+            {
+                "text": "5★",
+                "label": "Service Standard",
+                "sub": "Across every division"
+            }
+        ]
+    },
+    "serviceDivisions": {
+        "ctaLabel": "Explore Service",
+        "trustPills": [
+            {
+                "icon": "ShieldCheck",
+                "label": "Trusted Communities"
+            },
+            {
+                "icon": "MapPin",
+                "label": "Carolina Local"
+            },
+            {
+                "icon": "TrendingUp",
+                "label": "Proven ROI"
+            }
+        ],
+        "services": [
+            {
+                "title": "Residential Management",
+                "text": "Comprehensive management that protects your investment and ensures tenant satisfaction at every level.",
+                "icon": "Home",
+                "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85",
+                "badge": "Featured",
+                "index": 1,
+                "delay": 0.05,
+                "contentPadding": "p-8",
+                "className": "min-h-[340px] md:min-h-[440px] lg:row-span-2"
+            },
+            {
+                "title": "Commercial Management",
+                "text": "Strategic management for office, retail, and mixed-use properties focused on performance and long-term value.",
+                "icon": "Building2",
+                "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=700&q=85",
+                "index": 2,
+                "delay": 0.12,
+                "className": "min-h-[260px]"
+            },
+            {
+                "title": "HOA Management",
+                "text": "Expert governance, compliance, and community support for well-managed associations.",
+                "icon": "UsersRound",
+                "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=700&q=85",
+                "index": 3,
+                "delay": 0.18,
+                "className": "min-h-[260px]"
+            },
+            {
+                "title": "Developer & Builder Services",
+                "text": "Partnering with developers and builders to transition projects seamlessly into long-term operations.",
+                "icon": "HardHat",
+                "image": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=700&q=85",
+                "index": 4,
+                "delay": 0.24,
+                "className": "min-h-[260px]"
+            },
+            {
+                "title": "Financial Management",
+                "text": "Transparent reporting, budgeting, and financial oversight you can always count on.",
+                "icon": "BadgeDollarSign",
+                "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=700&q=85",
+                "index": 5,
+                "delay": 0.3,
+                "className": "min-h-[260px]"
+            }
+        ]
+    },
+    "whyChoose": {
+        "values": [
+            {
+                "icon": "BadgeDollarSign",
+                "title": "Financial Accountability",
+                "text": "Transparent reporting, accurate reconciliation, and responsible stewardship of every dollar."
+            },
+            {
+                "icon": "Handshake",
+                "title": "Vendor Coordination",
+                "text": "A vetted vendor network delivering quality service, competitive pricing, and minimal disruption."
+            },
+            {
+                "icon": "MessageCircle",
+                "title": "Proactive Communication",
+                "text": "Clear, consistent updates for all stakeholders — no surprises, only confidence."
+            },
+            {
+                "icon": "UsersRound",
+                "title": "Community Focused",
+                "text": "Enhancing community value through meaningful engagement and operational excellence."
+            },
+            {
+                "icon": "ClipboardCheck",
+                "title": "Compliance & Governance",
+                "text": "Full adherence to covenants, local regulations, and evolving industry best practices."
+            },
+            {
+                "icon": "Cpu",
+                "title": "Technology Forward",
+                "text": "Modern platforms deliver real-time insights, streamlined workflows, and faster responses."
+            }
+        ]
+    },
+    "vendorNetwork": {
+        "coordinateLabels": [
+            "+ 01_INFRA",
+            "+ 02_ESTHETICS",
+            "+ 03_RESTORATION",
+            "+ 04_COMPLIANCE"
+        ],
+        "scopeTitle": "Scope of services includes",
+        "verifiedBadge": "Verified Contractor Network",
+        "footerQ": "Are you a licensed and insured South Carolina contractor?",
+        "footerSub": "We are always expanding our network of qualified service professionals.",
+        "footerPrimaryCta": "Submit Maintenance Request",
+        "footerSecondaryCta": "Become an Approved Vendor Partner →",
+        "sections": [
+            {
+                "icon": "Wrench",
+                "tag": "Division 01",
+                "title": "Mechanical & Infrastructure",
+                "subtitle": "24/7 Emergency Dispatch",
+                "desc": "Critical repairs and preventative maintenance for complex building systems. We keep mechanical lines, electrical wiring, and climate networks functioning seamlessly to prevent asset deterioration.",
+                "statusLabel": "Emergency Dispatch SLA",
+                "statusVal": "< 15 Min Response",
+                "image": "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=85",
+                "badge": "Active Registry: 24 Crews",
+                "services": [
+                    "24/7 HVAC & Climate Systems Diagnostics",
+                    "Class A Master Electrical Troubleshooting",
+                    "Main Line Plumbing & Emergency Leak Repair",
+                    "Backflow Testing & Mechanical Audits"
+                ]
+            },
+            {
+                "icon": "Trees",
+                "tag": "Division 02",
+                "title": "Exterior Care & Landscaping",
+                "subtitle": "Weekly Maintenance & Curb Appeal",
+                "desc": "Precision lawn care, smart irrigation systems, and outer building envelope maintenance to secure absolute curb appeal and protect property valuation.",
+                "statusLabel": "Site Audit Frequency",
+                "statusVal": "Weekly Inspection Walks",
+                "image": "https://images.unsplash.com/photo-1557429287-b2e26467fc2b?auto=format&fit=crop&w=900&q=85",
+                "badge": "Statewide Coverage: 30 Crews",
+                "services": [
+                    "Turf Management, Mowing & Seasonal Color",
+                    "Smart Irrigation Audits & System Repairs",
+                    "Roofing, Siding & Gutter Assessments",
+                    "Priority Post-Storm Debris Cleanup"
+                ]
+            },
+            {
+                "icon": "Paintbrush",
+                "tag": "Division 03",
+                "title": "Cosmetics & Unit Turnover",
+                "subtitle": "48-Hour Vacancy Restoration",
+                "desc": "Lightning-fast drywall repairs, carpentry finishing, and paint turnover services designed to minimize vacancy times and prepare properties for occupancy.",
+                "statusLabel": "Average Turnover Time",
+                "statusVal": "48-Hour Guarantee",
+                "image": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=900&q=85",
+                "badge": "Turnover Specialist Crews",
+                "services": [
+                    "Precision Drywall Patching & Texture Matching",
+                    "High-End Interior & Exterior Painting",
+                    "Trim Work, Finish Carpentry & Renovations",
+                    "Master Locksmith & Rekey Security Services"
+                ]
+            },
+            {
+                "icon": "ShieldCheck",
+                "tag": "Division 04",
+                "title": "Vetting & Compliance Standards",
+                "subtitle": "100% Insured & Licensed Network",
+                "desc": "We enforce strict onboarding credentials to shield property owners from liability risks. Every vendor undergoes background checks and insurance audits annually.",
+                "statusLabel": "Minimum Insurance Limit",
+                "statusVal": "$1M General Liability",
+                "image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=85",
+                "badge": "100% Insured Compliance",
+                "services": [
+                    "Strict Criminal Background Screening",
+                    "Active South Carolina License Verification",
+                    "Workers' Compensation Coverage Mandates",
+                    "W-9 Compliance & Tax Audits"
+                ]
+            }
+        ]
+    },
+    "trustStrip": {
+        "bgText": "FC",
+        "pillars": [
+            {
+                "stat": "100%",
+                "label": "Licensed & Insured",
+                "body": "Every manager and vendor meets SC's strictest requirements. Zero compromise on protection."
+            },
+            {
+                "stat": "24h",
+                "label": "Response Guarantee",
+                "body": "Guaranteed first-response on every ticket and owner inquiry. Always on, always accountable."
+            },
+            {
+                "stat": "30+",
+                "label": "Active Communities",
+                "body": "From coastal Hilton Head to Upstate Greenville — serving communities statewide."
+            },
+            {
+                "stat": "#1",
+                "label": "Ranked in SC",
+                "body": "Top-ranked HOA & property management firm in South Carolina — three years running."
+            }
+        ],
+        "credentials": [
+            "SC Real Estate Commission",
+            "CAI Member Association",
+            "NARPM Certified Professionals",
+            "BBB Accredited Business",
+            "Equal Housing Opportunity",
+            "SCAR Affiliate Member"
+        ]
+    },
+    "testimonials": {
+        "testimonials": [
+            {
+                "quote": "First Choice Property Group has fundamentally changed how our community operates. Their financial reporting is crystal-clear, their vendor network is exceptional, and their team is always a step ahead.",
+                "name": "Michael T.",
+                "title": "HOA Board President",
+                "location": "Greenville, SC",
+                "initials": "MT",
+                "years": "Client since 2019"
+            },
+            {
+                "quote": "Maximized our rental income while eliminating vacancy headaches entirely. Best decision we've made as investors.",
+                "name": "Sarah L.",
+                "title": "Real Estate Investor",
+                "location": "Columbia, SC",
+                "initials": "SL",
+                "years": "Client since 2021"
+            },
+            {
+                "quote": "From community startup to full operations — their support was instrumental every step of the way.",
+                "name": "David R.",
+                "title": "Community Developer",
+                "location": "Spartanburg, SC",
+                "initials": "DR",
+                "years": "Client since 2020"
+            },
+            {
+                "quote": "Their response times are remarkable. Issues get resolved before residents even notice there was a problem. That's the FCPG standard.",
+                "name": "Jennifer M.",
+                "title": "HOA Treasurer",
+                "location": "Hilton Head, SC",
+                "initials": "JM",
+                "years": "Client since 2018"
+            },
+            {
+                "quote": "Professional, proactive, always accessible. We've worked with other firms — there is simply no comparison.",
+                "name": "Robert K.",
+                "title": "Property Owner",
+                "location": "Charleston, SC",
+                "initials": "RK",
+                "years": "Client since 2022"
+            },
+            {
+                "quote": "Managing a large coastal community has unique challenges. FCPG brings unmatched expertise in windstorm compliance and local vendor contracting.",
+                "name": "Linda J.",
+                "title": "HOA Board Director",
+                "location": "Mount Pleasant, SC",
+                "initials": "LJ",
+                "years": "Client since 2017"
+            },
+            {
+                "quote": "FCPG's commercial maintenance team is elite. They keep our medical and retail plazas in pristine condition year-round.",
+                "name": "James D.",
+                "title": "Commercial Asset Manager",
+                "location": "Clemson, SC",
+                "initials": "JD",
+                "years": "Client since 2020"
+            },
+            {
+                "quote": "Outstanding customer service and full financial transparency. Their reports are easy to read and always delivered on time.",
+                "name": "Amanda C.",
+                "title": "Board Member",
+                "location": "Myrtle Beach, SC",
+                "initials": "AC",
+                "years": "Client since 2019"
+            },
+            {
+                "quote": "FCPG turned my struggling portfolio around. Rent collection is automated, repairs are swift, and tenant retention is at an all-time high.",
+                "name": "Thomas H.",
+                "title": "Residential Landlord",
+                "location": "Rock Hill, SC",
+                "initials": "TH",
+                "years": "Client since 2021"
+            },
+            {
+                "quote": "They helped us resolve a multi-year budget deficit in just six months. Incredible financial stewardship and strategic advisory.",
+                "name": "Rachel W.",
+                "title": "Townhome HOA Secretary",
+                "location": "Lexington, SC",
+                "initials": "RW",
+                "years": "Client since 2018"
+            },
+            {
+                "quote": "Their advisory during our development phase prevented numerous structural and zoning headaches. True professionals.",
+                "name": "Marcus P.",
+                "title": "Mixed-Use Developer",
+                "location": "Fort Mill, SC",
+                "initials": "MP",
+                "years": "Client since 2022"
+            },
+            {
+                "quote": "We trust them with our entire multi-family portfolio. Their tenant vetting process is flawless, leading to near-zero default rates.",
+                "name": "Jessica B.",
+                "title": "Investor Group VP",
+                "location": "Charleston, SC",
+                "initials": "JB",
+                "years": "Client since 2019"
+            }
+        ]
+    },
+    "resourcesFAQ": {
+        "badge": "Information Hub",
+        "heading1": "Got Questions?",
+        "heading2": "We Have Answers.",
+        "description": "Explore answers to common questions about association governance, tenant screening, property inspections, and billing operations.",
+        "supportCard": {
+            "title": "Need Direct Assistance?",
+            "subtitle": "Our South Carolina support team is standing by.",
+            "stats": [
+                {
+                    "value": "24/7",
+                    "label": "Emergency Support"
+                },
+                {
+                    "value": "< 15m",
+                    "label": "Response Time"
+                },
+                {
+                    "value": "100%",
+                    "label": "Local Board Support"
+                }
+            ],
+            "phoneHref": "tel:8643260000",
+            "phone": "(864) 326-0000",
+            "emailHref": "mailto:info@firstchoicepg.com",
+            "email": "info@firstchoicepg.com",
+            "ctaLabel": "Submit Support Request",
+            "ctaHref": "/contact"
+        },
+        "faqs": [
+            {
+                "category": "Property Maintenance",
+                "q": "How do I submit a maintenance request?",
+                "a": "All non-emergency maintenance requests should be submitted through our main office via phone, email, or our digital request form. For after-hours structural, electrical, or mechanical emergencies, please contact our 24/7 urgent dispatch line directly at (864) 326-0000."
+            },
+            {
+                "category": "Tenant Screening",
+                "q": "What is your tenant screening process?",
+                "a": "We perform a comprehensive multi-point screening on all prospective tenants. This includes credit score evaluation, nationwide eviction checks, criminal background checks, employment and income verification (requiring 3x monthly rent), and direct rental history references."
+            },
+            {
+                "category": "Finance & Reporting",
+                "q": "How do HOA board members access financial reports?",
+                "a": "Board members receive secure, automated monthly financial report distributions. We prepare and distribute balance sheets, general ledgers, budget comparisons, and delinquency reports so your board is always fully informed."
+            },
+            {
+                "category": "Dues & Payments",
+                "q": "How are HOA dues collected and processed?",
+                "a": "Homeowners can pay dues electronically via automated bank transfers (ACH), online invoice options, or by mailing checks to our secure banking lockbox processing center."
+            },
+            {
+                "category": "Governance",
+                "q": "What steps do you take to enforce HOA covenants?",
+                "a": "We conduct scheduled, objective community inspections to document covenants compliance. Our automated system generates notification letters with photo evidence, tracks grace periods, and handles fine assessments in strict accordance with your community's bylaws."
+            },
+            {
+                "category": "Corporate Overview",
+                "q": "What types of properties does First Choice manage?",
+                "a": "First Choice Property Group provides comprehensive property management services across South Carolina, specializing in Homeowners Associations (HOAs), residential rental properties, and commercial asset management."
+            }
+        ]
+    },
+    "serviceAreas": {
+        "coordinateLabels": [
+            "+ 81.1637° W",
+            "+ 33.8361° N"
+        ],
+        "mapVersionLabel": "FCPG_CORP_MAP v2.3",
+        "tooltipLabels": {
+            "statewideTitle": "SC Statewide Presence",
+            "statewideUnit": "Regions",
+            "statewideDesc": "Licensed Property Management"
+        },
+        "ctaLabel": "Request Statewide Proposal",
+        "citiesData": [
+            {
+                "id": "Greenville",
+                "name": "Greenville",
+                "x": 727,
+                "y": 348,
+                "count": "14",
+                "type": "Managed Communities"
+            },
+            {
+                "id": "Spartanburg",
+                "name": "Spartanburg",
+                "x": 738,
+                "y": 346,
+                "count": "9",
+                "type": "Managed Properties"
+            },
+            {
+                "id": "Anderson",
+                "name": "Anderson",
+                "x": 720,
+                "y": 354,
+                "count": "6",
+                "type": "Active Associations"
+            },
+            {
+                "id": "Columbia",
+                "name": "Columbia",
+                "x": 754,
+                "y": 370,
+                "count": "18",
+                "type": "HOA Portfolios"
+            },
+            {
+                "id": "Florence",
+                "name": "Florence",
+                "x": 776,
+                "y": 360,
+                "count": "5",
+                "type": "Client Associations"
+            },
+            {
+                "id": "Myrtle Beach",
+                "name": "Myrtle Beach",
+                "x": 790,
+                "y": 366,
+                "count": "11",
+                "type": "Coastal Communities"
+            },
+            {
+                "id": "Charleston",
+                "name": "Charleston",
+                "x": 772,
+                "y": 390,
+                "count": "22",
+                "type": "Managed Associations"
+            },
+            {
+                "id": "Beaufort",
+                "name": "Beaufort",
+                "x": 760,
+                "y": 398,
+                "count": "7",
+                "type": "Historic Properties"
+            }
+        ]
+    },
+    "aboutPage": {
+        "hero": {
+            "tagline": "About First Choice",
+            "heading1": "Pioneering Standards.",
+            "heading2": "Cultivating Trust.",
+            "heading3": "Managing Assets.",
+            "description": "First Choice Property Group is a premier full-service property management company built on absolute transparency, certified leadership, and a relationship-driven partnership standard.",
+            "bgImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1800&q=85",
+            "bgImageAlt": "Modern corporate boardroom and glass offices",
+            "coordLat": "+ 34.8526° N",
+            "coordLng": "+ 82.3861° W"
+        },
+        "philosophy": {
+            "badge": "Our Philosophy",
+            "heading": "Excellence in Every Asset.",
+            "description": "We don't believe in passive oversight. We actively safeguard your investments through a rigorous, proactive framework centered on compliance, transparency, and personal accountability."
+        },
+        "pillars": [
+            {
+                "icon": "Award",
+                "title": "Decades of Experience",
+                "text": "Over 15 years navigating complex South Carolina property regulations, coastal windstorm compliance, and developer-to-board transitions."
+            },
+            {
+                "icon": "UsersRound",
+                "title": "Certified Leadership",
+                "text": "Every regional portfolio is directed by certified association managers (CMCA, AMS) actively guiding boards and resolving operational challenges."
+            },
+            {
+                "icon": "MessageCircle",
+                "title": "Proactive Communication",
+                "text": "We guarantee a 24-hour response SLA on all inquiries, supported by real-time resident text alerts and automated board updates."
+            },
+            {
+                "icon": "ClipboardCheck",
+                "title": "Disciplined Operations",
+                "text": "Structured onsite inspections, automated maintenance dispatching, and a fully vetted, licensed, and insured vendor network."
+            },
+            {
+                "icon": "BadgeDollarSign",
+                "title": "Financial Accountability",
+                "text": "Complete monthly financial packages, secure lockbox collections, tax support, and rigorous reserve fund optimization."
+            },
+            {
+                "icon": "Handshake",
+                "title": "Relationship-Driven Care",
+                "text": "We operate with a partnership first model. Trust is earned through open communication, mutual respect, and face-to-face board collaboration."
+            }
+        ],
+        "story": {
+            "badge": "Our History",
+            "heading1": "A Legacy of Elevating",
+            "heading2": "Community Standards.",
+            "description": "Founded in 2009 in Greenville, SC, First Choice Property Group was established to address a critical gap in the market: the need for professional, transparent, and responsive property management. What started as a local residential portfolio has grown into a statewide operation, managing premier HOAs, commercial spaces, and mixed-use developments. Despite our scale, our core mission remains unchanged: delivering peace of mind through disciplined management.",
+            "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+            "imageAlt": "Corporate office building glass facade",
+            "milestones": [
+                {
+                    "year": "2009",
+                    "title": "Foundation in Greenville",
+                    "desc": "Established FCPG with a single portfolio manager and a mission to introduce transparent financial reporting to HOA boards.",
+                    "highlight": "Greenville Office Opened",
+                    "icon": "Building2",
+                    "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Greenville SC historical brick architecture",
+                    "achievements": [
+                        "First Choice Property Group founded in Greenville, SC",
+                        "Established transparent, double-entry financial reporting standard",
+                        "Onboarded first 5 residential community associations"
+                    ]
+                },
+                {
+                    "year": "2014",
+                    "title": "Certified Portfolio Growth",
+                    "desc": "Achieved AMS and CMCA credentials company-wide and expanded operations to Spartanburg and Anderson regions.",
+                    "highlight": "50+ Active Communities",
+                    "icon": "Award",
+                    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "SC suburban community neighborhood",
+                    "achievements": [
+                        "Company-wide certification (CMCA and AMS credentials)",
+                        "Expanded regional managers to Spartanburg and Anderson counties",
+                        "Surpassed 50 active client communities under management"
+                    ]
+                },
+                {
+                    "year": "2019",
+                    "title": "Statewide Expansion",
+                    "desc": "Opened our Columbia and Charleston offices, introducing developer consulting and coastal windstorm compliance programs.",
+                    "highlight": "Columbia & Charleston HQs",
+                    "icon": "TrendingUp",
+                    "image": "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Columbia SC office building facade",
+                    "achievements": [
+                        "Opened branch offices in Columbia and Charleston, SC",
+                        "Launched dedicated developer consultation division",
+                        "Introduced specialized hurricane and coastal windstorm compliance programs"
+                    ]
+                },
+                {
+                    "year": "2024",
+                    "title": "Technology Integration",
+                    "desc": "Launched automated tenant screening workflows, online board portals, and a vetted vendor registry with strict SLA monitoring.",
+                    "highlight": "100% Digital Audits",
+                    "icon": "Cpu",
+                    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Tablet showing property management portal",
+                    "achievements": [
+                        "Launched secure, real-time board member and owner portals",
+                        "Automated tenant screening workflows with 3x income verification",
+                        "Integrated digital vendor registry with real-time SLA tracking"
+                    ]
+                },
+                {
+                    "year": "2026",
+                    "title": "FCPG Active System V2",
+                    "desc": "Unveiled our relationship-first standard, managing over 8,500 units with a vetted contractor network and 24-hour SLA.",
+                    "highlight": "98.4% Retention Rate",
+                    "icon": "Handshake",
+                    "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Board meeting and collaboration",
+                    "achievements": [
+                        "Unveiled our relationship-driven management partnership standard",
+                        "Portfolio expanded to manage over 8,500 units statewide",
+                        "Maintained a 98.4% annual client retention rate"
+                    ]
+                }
+            ]
+        },
+        "leadership": {
+            "badge": "Executive Steering",
+            "heading": "Our Leadership Team",
+            "description": "Meet the certified professionals directing our regional operations, financial compliance, and client partnerships.",
+            "members": [
+                {
+                    "name": "Robert Vance, CMCA",
+                    "role": "Managing Partner & Founder",
+                    "bio": "Robert has over 18 years of real estate asset management experience and directs FCPG's strategic growth and developer consulting services.",
+                    "image": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Robert Vance portrait"
+                },
+                {
+                    "name": "Sarah Jenkins, AMS",
+                    "role": "Director of HOA Operations",
+                    "bio": "Sarah manages our portfolio managers and enforces community standards, bringing certified expertise in covenant enforcement.",
+                    "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Sarah Jenkins portrait"
+                },
+                {
+                    "name": "Marcus Thorne, CPA",
+                    "role": "Chief Financial Officer",
+                    "bio": "Marcus oversees all accounting, reporting, and reserve fund auditing, ensuring flawless financial compliance for all clients.",
+                    "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80",
+                    "imageAlt": "Marcus Thorne portrait"
+                }
+            ]
+        },
+        "stats": [
+            {
+                "value": "15+",
+                "label": "Years in Service"
+            },
+            {
+                "value": "8,500+",
+                "label": "Units Managed"
+            },
+            {
+                "value": "120+",
+                "label": "Vetted Contractors"
+            },
+            {
+                "value": "98.4%",
+                "label": "Retention Rate"
+            }
+        ]
+    },
+    "contactPage": {
+        "hero": {
+            "tagline": "Start a Partnership",
+            "heading1": "Start a Conversation.",
+            "heading2": "Get in Touch.",
+            "heading3": "Request a Proposal.",
+            "description": "Ready to elevate your property standards? Connect with our certified association managers and regional office teams across South Carolina.",
+            "bgImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1800&q=85",
+            "bgImageAlt": "Modern corporate offices and meeting space",
+            "coordLat": "+ 34.8526° N",
+            "coordLng": "+ 82.3861° W"
+        },
+        "directory": {
+            "badge": "Office Presence",
+            "heading1": "Corporate HQ &",
+            "heading2": "Regional Operations",
+            "description": "Our headquarters is located in Greenville, SC, with regional portfolio managers active across every major South Carolina metro area."
+        },
+        "form": {
+            "badge": "Request Proposal",
+            "heading": "Begin a Partnership",
+            "description": "Submit your association or property details below, and our leadership team will respond with a custom proposal package.",
+            "progressLabel": "PROPOSAL FORM COMPLETION PROGRESS",
+            "successTitle": "Inquiry Received",
+            "successDesc": "Thank you for reaching out. A senior partner will review your property details and contact you within 2 hours.",
+            "submitLabel": "Submit proposal request",
+            "loadingLabel": "Sending request...",
+            "resetLabel": "Send another inquiry"
+        }
+    },
+    "metadata": {
+        "title": "First Choice Property Group | Professional Property Management SC",
+        "description": "First Choice Property Group delivers expert HOA, residential, commercial, and financial property management services across South Carolina — Greenville, Columbia, Charleston & beyond.",
+        "keywords": [
+            "property management South Carolina",
+            "HOA management Greenville SC",
+            "residential property management",
+            "commercial property management",
+            "First Choice Property Group"
+        ],
+        "openGraph": {
+            "title": "First Choice Property Group",
+            "description": "Full-service property management for communities, investors, and developers across South Carolina.",
+            "type": "website",
+            "locale": "en_US",
+            "siteName": "First Choice Property Group"
+        },
+        "twitter": {
+            "card": "summary_large_image",
+            "title": "First Choice Property Group",
+            "description": "Professional property management across South Carolina."
+        }
+    }
+}
